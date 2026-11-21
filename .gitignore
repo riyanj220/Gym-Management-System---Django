@@ -1,2 +1,26 @@
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# Django local database & static
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+*.log
+
+# Environment variables
+.env
+.env.local
+
+# Frontend packages
+node_modules/
 static/node_modules/
 static/lightbox2/
+
+# Dev utilities
+take_screenshots.py

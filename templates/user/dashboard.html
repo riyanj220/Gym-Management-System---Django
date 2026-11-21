@@ -1,178 +1,301 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Member Dashboard &bull; RJ GYM{% endblock %}
+
 {% block content %}
-<style>
-    .trainer-img {
-        width: 200px;
-        height: auto;
-        margin-left: 3%;
-        padding-top: 10px;
-    }
-    .card-footer {
-        display: flex;
-        gap: 24px; /* Adjust the value to control the space between icons */
-    }
-    .custom-h3 {
-        font-family: 'Helvetica Neue', sans-serif;
-        font-weight: bold;
-    }
-</style>
+<main class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Left Sidebar -->
+      <div class="col-lg-3">
+        {% include 'user/left_sidebar.html' with current_plan=current_plan %}
+      </div>
 
-<main>
-    <!-- Services -->
-    <section class="container my-4">
-        <div class="row">
-            <div class="col-3">
-                {% include 'user/left_sidebar.html' with current_plan=current_plan%}
-            </div>
-
-            <div class="col-9">
-                <h3 class="mb-4 border-bottom pb-1 text-center custom-h3">Dashboard</h3>
-
-                <div class="row g-3"> <!-- Add grid gap -->
-
-                    <!-- Current Package -->
-                    <div class="col-md-6">
-                        {% if current_plan %}
-                            <div class="card shadow">
-                                <h5 class="card-header">Current package</h5>
-                                <div class="card-body">
-                                    <h6 class="card-text">{{current_plan.plan}}</h6>
-                                    <p>Price: {{current_plan.price}} $</p>
-                                    <p>Purchased on: {{current_plan.reg_date}}</p>
-                                    <p>Expires on: {{end_date}}</p>
-                                    {% if is_expired %}
-                                        <p class="text-danger">Status: Expired</p>
-                                        <a href="{% url 'pricing' %}" class="btn btn-outline-primary">Renew Subscription</a>
-                                    {% else %}
-                                        <p class="text-success">Status: Active</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% else %}
-                            <div class="card shadow">
-                                <h5 class="card-header">No subscription yet</h5>
-                                <div class="card-body">
-                                    <p>You haven't subscribed to any plan yet. <a href="{% url 'pricing' %}">See Pricing</a></p>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <!-- My Trainer -->
-                    <div class="col-md-6">
-                        {% if current_trainer %}
-                            <div class="card shadow">
-                                <h5 class="card-header">My Trainer</h5>
-                                <img src="{{current_trainer.trainer.img.url}}" class="card-img-top trainer-img" alt="{{ current_trainer.trainer.full_name }}">
-                                <div class="card-body">
-                                    <h6 class="card-text name-label">{{ current_trainer.trainer.full_name }}</h6> <!-- Updated name display -->
-                                </div>
-                                <div class="card-footer">
-                                    <a href="{{social_links.facebook}}" title="Facebook"><i class="bi bi-facebook fs-3"></i></a>
-                                    <a href="{{social_links.twitter}}" title="Twitter"><i class="bi bi-twitter fs-3"></i></a>
-                                    <a href="{{social_links.linkedin}}" title="Linkedin"><i class="bi bi-linkedin fs-3"></i></a>
-                                    <button data-bs-toggle="modal" data-bs-target="#exampleModal" title="Achievements" class="btn btn-primary btn-sm ms-auto"><i class="bi bi-trophy-fill"></i></button>
-
-                                    <!-- modal for Acheivements -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl">
-                                          <div class="modal-content">
-                                            <div class="modal-header">
-                                              <h5 class="modal-title ms-auto" id="exampleModalLabel">{{ current_trainer.trainer.full_name }} Acheivements</h5>
-                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                              <table class="table table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th >Title</th>
-                                                            <th>Date Awarded</th>
-                                                            <th>Details</th>
-                                                            <th>Image</th>
-                                                        </tr>
-                                                    </thead>
-
-                                                    <tbody>
-                                                        {% for achievement in achievements %}
-                                                            <tr>
-                                                                <td>{{ achievement.title }}</td>
-                                                                <td>{{ achievement.date_awarded}}</td>
-                                                                <td>{{ achievement.description }}</td>
-                                                                <td>
-                                                                    {% if achievement.badge_image %}
-                                                                        <img src="{{ achievement.badge_image.url }}" width="80" alt="{{ achievement.title }}">
-                                                                    {% else %}
-                                                                        No image available
-                                                                    {% endif %}
-                                                                </td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                    </tbody>
-                                              </table>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-
-                                      <!-- modal end -->
-
-                                </div>
-                            </div>
-                        {% else %}
-                            <div class="card">
-                                <h5 class="card-header">No Trainer Assigned</h5>
-                                <div class="card-body">
-                                    <p>You haven't subscribed to any plan yet OR you haven't been assigned any trainer yet. <a href="{% url 'pricing' %}">See Pricing</a></p>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <!-- Workout Summary -->
-                    <div class="col-md-6 " style="margin-top: -175px;">
-                        <div class="card shadow">
-                            <h5 class="card-header">Workout Summary</h5>
-                            <div class="card-body">
-                                <p>Workouts this week: 5</p>
-                                <p>Hours worked out: 8 hrs</p>
-                                <p>Calories burned: 2500 cal</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Health Tip of the Day -->
-                    <div class="col-md-6">
-                        <div class="card shadow">
-                            <h5 class="card-header">Health Tip of the Day</h5>
-                            <div class="card-body">
-                                <p>"Stay hydrated! Drinking water boosts your energy levels and improves your mood."</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recent Activities -->
-                    <div class="col-md-6"style="margin-top: -130px;">
-                        <div class="card shadow">
-                            <h5 class="card-header">Recent Activities</h5>
-                            <div class="card-body">
-                                <ul>
-                                    <li>Completed 'Cardio Session'</li>
-                                    <li>Trainer approved new workout plan</li>
-                                    <li>Subscription renewed on Feb 1, 2025</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+      <!-- Main Content -->
+      <div class="col-lg-9">
+        <!-- Welcome Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 border-bottom pb-3">
+          <div>
+            <h2 class="fw-bold mb-1">Welcome back, {{ user.first_name|default:user.username }}!</h2>
+            <p class="text-secondary small mb-0">Track your active membership, coaching updates, and fitness milestones.</p>
+          </div>
+          {% if current_plan and not is_expired %}
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fs-6">
+              <i class="bi bi-shield-check me-1"></i> Active Plan: {{ current_plan.plan }}
+            </span>
+          {% else %}
+            <a href="{% url 'pricing' %}" class="btn btn-accent btn-sm rounded-pill">
+              <i class="bi bi-lightning-charge me-1"></i> Upgrade Membership
+            </a>
+          {% endif %}
         </div>
-    </section>
+
+        <!-- Top KPI Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-icon-accent">
+                <i class="bi bi-card-checklist"></i>
+              </div>
+              <div>
+                <div class="kpi-title">Plan Status</div>
+                <div class="kpi-value fs-5">
+                  {% if current_plan %}
+                    {% if is_expired %}<span class="text-danger">Expired</span>{% else %}<span class="text-success">Active</span>{% endif %}
+                  {% else %}
+                    <span class="text-muted">None</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-icon-blue">
+                <i class="bi bi-calendar-check"></i>
+              </div>
+              <div>
+                <div class="kpi-title">Expires On</div>
+                <div class="kpi-value fs-6 text-truncate">
+                  {% if end_date %}{{ end_date }}{% else %}&mdash;{% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-icon-green">
+                <i class="bi bi-person-badge"></i>
+              </div>
+              <div>
+                <div class="kpi-title">Coach</div>
+                <div class="kpi-value fs-6 text-truncate">
+                  {% if current_trainer %}{{ current_trainer.trainer.full_name|slice:":12" }}{% else %}Unassigned{% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-icon-accent">
+                <i class="bi bi-activity"></i>
+              </div>
+              <div>
+                <div class="kpi-title">Sessions</div>
+                <div class="kpi-value">5 <span class="fs-6 text-muted fw-normal">/wk</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Cards Grid -->
+        <div class="row g-4">
+          <!-- Package Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0">
+              <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-ticket-perforated me-2"></i>Current Package</h6>
+                {% if current_plan and not is_expired %}
+                  <span class="badge bg-success">Active</span>
+                {% elif current_plan and is_expired %}
+                  <span class="badge bg-danger">Expired</span>
+                {% endif %}
+              </div>
+              <div class="card-body">
+                {% if current_plan %}
+                  <h4 class="fw-bold mb-1">{{ current_plan.plan }}</h4>
+                  <p class="text-secondary small mb-3">Purchased for ${{ current_plan.price }} &bull; Started on {{ current_plan.reg_date }}</p>
+
+                  <div class="p-3 bg-light rounded-3 mb-3 small">
+                    <div class="d-flex justify-content-between mb-1">
+                      <span class="text-muted">Subscription Cycle:</span>
+                      <span class="fw-semibold">{{ current_plan.plan.validity|default:"30" }} Days</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                      <span class="text-muted">Access Expiration:</span>
+                      <span class="fw-semibold text-danger">{{ end_date }}</span>
+                    </div>
+                  </div>
+
+                  {% if is_expired %}
+                    <a href="{% url 'pricing' %}" class="btn btn-accent w-100">
+                      <i class="bi bi-arrow-repeat me-1"></i> Renew Subscription Plan
+                    </a>
+                  {% else %}
+                    <a href="{% url 'pricing' %}" class="btn btn-outline-primary btn-sm w-100">
+                      <i class="bi bi-arrow-up-circle me-1"></i> Change or Upgrade Plan
+                    </a>
+                  {% endif %}
+                {% else %}
+                  <div class="text-center py-4">
+                    <i class="bi bi-ticket-detailed fs-1 text-muted"></i>
+                    <h6 class="fw-bold mt-2">No Active Membership</h6>
+                    <p class="text-muted small mb-3">Join a plan to gain complete facility access and dedicated trainer matching.</p>
+                    <a href="{% url 'pricing' %}" class="btn btn-accent btn-sm">Explore Plans</a>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Coach Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0">
+              <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-person-workspace me-2"></i>Assigned Coach</h6>
+                {% if current_trainer %}
+                  <button data-bs-toggle="modal" data-bs-target="#coachAchievementsModal" class="btn btn-sm btn-outline-warning rounded-pill" title="View Coach Achievements">
+                    <i class="bi bi-trophy-fill me-1"></i> Achievements
+                  </button>
+                {% endif %}
+              </div>
+              <div class="card-body">
+                {% if current_trainer %}
+                  <div class="d-flex align-items-center gap-3 mb-3">
+                    <img src="{{ current_trainer.trainer.img.url }}" class="rounded-circle object-fit-cover shadow-sm" style="width: 72px; height: 72px;" alt="{{ current_trainer.trainer.full_name }}">
+                    <div>
+                      <h5 class="fw-bold mb-0">{{ current_trainer.trainer.full_name }}</h5>
+                      <p class="text-secondary small mb-1">Personal Fitness Coach</p>
+                      <div class="d-flex gap-2">
+                        {% if social_links.facebook %}<a href="{{ social_links.facebook }}" target="_blank" class="text-secondary small"><i class="bi bi-facebook"></i></a>{% endif %}
+                        {% if social_links.twitter %}<a href="{{ social_links.twitter }}" target="_blank" class="text-secondary small"><i class="bi bi-twitter"></i></a>{% endif %}
+                        {% if social_links.linkedin %}<a href="{{ social_links.linkedin }}" target="_blank" class="text-secondary small"><i class="bi bi-linkedin"></i></a>{% endif %}
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="text-secondary small mb-3">{{ current_trainer.trainer.details|truncatewords:20 }}</p>
+
+                  <div class="d-flex gap-2">
+                    <a href="{% url 'subscriber_chat' %}" class="btn btn-primary btn-sm flex-grow-1">
+                      <i class="bi bi-chat-dots me-1"></i> Message Coach
+                    </a>
+                    <a href="{% url 'report_to_trainer' %}" class="btn btn-outline-secondary btn-sm">
+                      <i class="bi bi-flag"></i> Report
+                    </a>
+                  </div>
+                {% else %}
+                  <div class="text-center py-4">
+                    <i class="bi bi-person-x fs-1 text-muted"></i>
+                    <h6 class="fw-bold mt-2">No Coach Assigned</h6>
+                    <p class="text-muted small mb-0">Once you subscribe to a Pro or VIP plan, an expert trainer is assigned to your account.</p>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Workout Summary Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0">
+              <div class="card-header bg-white">
+                <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-bar-chart-line me-2"></i>Weekly Performance Log</h6>
+              </div>
+              <div class="card-body">
+                <div class="row g-3 text-center">
+                  <div class="col-4">
+                    <div class="p-2 bg-light rounded-3">
+                      <div class="fs-4 fw-bold text-dark">5</div>
+                      <div class="small text-muted">Workouts</div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light rounded-3">
+                      <div class="fs-4 fw-bold text-dark">8.5</div>
+                      <div class="small text-muted">Hours</div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="p-2 bg-light rounded-3">
+                      <div class="fs-4 fw-bold text-warning">2,750</div>
+                      <div class="small text-muted">Calories</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-3 pt-3 border-top small text-secondary">
+                  <i class="bi bi-info-circle text-primary me-1"></i> Log verified by front-desk digital scan.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Daily Fitness Tip -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0" style="background: linear-gradient(135deg, #0f172a, #1e293b); color: #ffffff;">
+              <div class="card-body p-4 d-flex flex-column justify-content-between">
+                <div>
+                  <span class="badge bg-warning text-dark mb-2"><i class="bi bi-lightbulb-fill me-1"></i> Daily Performance Tip</span>
+                  <h5 class="fw-bold text-white mb-2">Hydration & Recovery</h5>
+                  <p class="text-secondary small lh-base mb-0">
+                    "Consistent hydration accelerates cellular glycogen replenishment and reduces delayed onset muscle soreness (DOMS). Aim for at least 3-4 liters on high-intensity training days."
+                  </p>
+                </div>
+                <div class="mt-3 pt-2 text-warning small fw-semibold">
+                  &mdash; RJ GYM Sports Science Team
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Coach Achievements -->
+  {% if current_trainer %}
+  <div class="modal fade" id="coachAchievementsModal" tabindex="-1" aria-labelledby="coachModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-bold" id="coachModalLabel">
+            <i class="bi bi-award text-warning me-2"></i>{{ current_trainer.trainer.full_name }} &bull; Achievements & Honors
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="table-responsive">
+            <table class="gym-table">
+              <thead>
+                <tr>
+                  <th>Badge</th>
+                  <th>Achievement Title</th>
+                  <th>Date Awarded</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for achievement in achievements %}
+                <tr>
+                  <td>
+                    {% if achievement.badge_image %}
+                      <img src="{{ achievement.badge_image.url }}" width="45" height="45" class="rounded object-fit-contain" alt="{{ achievement.title }}">
+                    {% else %}
+                      <i class="bi bi-award fs-3 text-warning"></i>
+                    {% endif %}
+                  </td>
+                  <td class="fw-bold">{{ achievement.title }}</td>
+                  <td class="text-muted small">{{ achievement.date_awarded }}</td>
+                  <td class="text-secondary small">{{ achievement.description }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="4" class="text-center py-3 text-muted">No specific achievements listed.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer border-top">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </main>
 {% endblock %}

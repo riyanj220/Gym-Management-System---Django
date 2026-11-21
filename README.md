@@ -1,105 +1,123 @@
-# General Features for Everyone: 
+# Gym Management System (GMS)
 
-🏠 Home Page <br>
-🖼️ Gallery <br>
-📨 Enquiry Form <br>
-📖 Faq <br>
-📧 Contact us
+A full-stack fitness management web platform built with Django and Django Channels. The system provides role-based portals for gym members and trainers, subscription tier management with Stripe payment processing, and real-time communication via WebSockets.
 
-# Features for Users:
+---
 
-🏋️‍♀️ Dashboard <br>
-💳 Subscription plans <br>
-🔔 Notifications <br>
-💬 Chat with Trainer <br>
-📝 Report to Trainer <br>
-⚙️ Settings <br>
+## Key Screenshots
 
-# Features for Trainers:
+### Landing Page & Facility Overview
+![Home](docs/screenshots/home.png)
 
-📊 Dashboard <br>
-🧑‍🤝‍🧑 My Subscribers <br>
-💸 Payments <br>
-💬 Chat with Subscribers <br>
-🔔 Notifications <br>
-🔒 Change Password <br>
-📝 Report to Users <br>
-⚙️ Settings <br>
+### Membership Plans & Pricing Matrix
+![Pricing](docs/screenshots/pricing.png)
 
-# Screenshots:
+### Member Dashboard
+![Member Dashboard](docs/screenshots/user_dashboard.png)
 
-## General Features
+### Trainer Management Portal
+![Trainer Dashboard](docs/screenshots/trainer_dashboard.png)
 
-### Home:
-![image](https://github.com/user-attachments/assets/210bd9ad-4fbe-44d4-8439-9ad963acf613)
+---
 
-### Gallery:
-![image](https://github.com/user-attachments/assets/4aa045d0-3224-401f-bb1a-d66e7b34cadb)
+## Core Capabilities
 
-### Enquiry:
-![image](https://github.com/user-attachments/assets/5e792bef-d215-4a83-9f7b-9283b6cdf3dd)
+### Public Portal
+- Dynamic landing page showcasing gym services, equipment highlights, and facility photo albums.
+- Tiered membership pricing matrix with automated term-based discount calculations.
+- Integrated visitor enquiry and trial pass booking system.
+- Searchable FAQ knowledge base and interactive facility location map.
 
-### Faq:
-![image](https://github.com/user-attachments/assets/46571da6-5522-4b73-889c-9c5143471749)
+### Member Portal
+- Personal dashboard displaying active subscription status, validity duration, and assigned trainer.
+- Direct real-time messaging with assigned fitness coach via WebSockets.
+- Formal progress reporting interface for training feedback and diet check-ins.
+- Account settings with credential management and notification preferences.
 
-### Contact us:
-![image](https://github.com/user-attachments/assets/59c5c4df-61dc-484e-b1f0-25fb746476e3)
+### Trainer Portal
+- Dedicated staff dashboard with active subscriber roster and compensation statements.
+- Direct member communication channel with subscriber dropdown switcher.
+- Real-time notification dispatch powered by WebSocket consumer groups.
+- Credentials portfolio displaying certifications, awards, and specialization badges.
 
-## User Features
+### Payment & Administration
+- Stripe payment integration with dynamic checkout sessions.
+- Role-based access control separating members, trainers, and site administrators.
+- Enhanced administration dashboard configured via Django Jazzmin.
 
-### Dashboard:
-![image](https://github.com/user-attachments/assets/7274e5ad-9649-484f-944a-fc80a8f3748a)
+---
 
-### Subscription plans:
-![image](https://github.com/user-attachments/assets/61642bba-5d6a-4215-abcd-e8db2ab03701)
+## Tech Stack
 
-### Notifications:
-![image](https://github.com/user-attachments/assets/88e76168-510c-40d8-8613-365f5bace486)
+| Layer | Technologies |
+|---|---|
+| **Backend** | Python 3, Django 5, ASGI (Daphne) |
+| **Real-time** | Django Channels, WebSockets (InMemory / Redis) |
+| **Database** | SQLite (Default / Development), PostgreSQL (Production-ready) |
+| **Frontend** | HTML5, CSS3, Bootstrap 5, JavaScript, jQuery |
+| **Integrations** | Stripe API, Django Crispy Forms, Lightbox2 |
 
-### Report to trainer:
-![image](https://github.com/user-attachments/assets/b0073d28-e895-4e74-9ddb-e256c3083d57)
+---
 
-### Settings:
-![image](https://github.com/user-attachments/assets/178a718e-cc91-44c2-be24-419076bc3b75)
+## Getting Started
 
-## Trainer Features
+### 1. Prerequisites
+- Python 3.10+
+- Git
 
-### Dashboard:
-![image](https://github.com/user-attachments/assets/4d2e80f3-de5a-4a4e-965f-731bb7535e71)
+### 2. Clone the Repository
+```bash
+git clone https://github.com/your-username/Gym-Management-System---Django.git
+cd Gym-Management-System---Django
+```
 
-### My Subscribers:
-![image](https://github.com/user-attachments/assets/c4326e31-d8a9-4aba-841b-c88a866d4aba)
+### 3. Create Virtual Environment & Install Dependencies
+```bash
+# Create virtual environment
+python3 -m venv .venv
 
-### Payments:
-![image](https://github.com/user-attachments/assets/b609fceb-6eaf-4a7a-a8fb-7eb6a75d7c7b)
+# Activate virtual environment:
+# On Linux / macOS:
+source .venv/bin/activate
 
-### Chat with subscribers:
-![image](https://github.com/user-attachments/assets/843f8621-ac7f-4bb9-b766-a75522c4b2d8)
+# On Windows (Command Prompt):
+# .venv\Scripts\activate.bat
 
-### Notifications:
-![image](https://github.com/user-attachments/assets/df8b2f38-7b30-4390-853a-1d4662dd4180)
+# On Windows (PowerShell):
+# .venv\Scripts\Activate.ps1
 
-### Change password:
-![image](https://github.com/user-attachments/assets/e0411fd6-f635-482a-8a50-1de19d501b9f)
+# Install dependencies
+pip install -r requirements.txt
+```
 
-### Report to users:
-![image](https://github.com/user-attachments/assets/26f29d49-0503-4835-aad7-e42d643b9df1)
+*(Optional with `uv`: `uv venv && uv pip install -r requirements.txt`)*
 
-### Settings:
-![image](https://github.com/user-attachments/assets/f076985f-58f7-4f97-a8eb-5971169d1824)
+### 4. Database Setup & Seeding
+```bash
+python manage.py migrate
+python seed_data.py
+```
 
+### 5. Run Development Server
+```bash
+python manage.py runserver
+```
+Navigate to `http://127.0.0.1:8000` in your browser.
 
+---
 
+## Demo Credentials
 
+The included seeding script (`seed_data.py`) automatically provisions sample accounts:
 
+| Portal | Username | Password |
+|---|---|---|
+| **Admin Panel** (`/admin`) | `admin` | `admin123` |
+| **Member Portal** (`/Login`) | `john_doe` | `password123` |
+| **Trainer Portal** (`/Trainer-Login`) | `alex_fit` | `trainer123` |
 
+---
 
+## License
 
-
-
-
-
-
-
-
-
+This project is licensed under the MIT License. See [LICENSE.txt](LICENSE.txt) for details.

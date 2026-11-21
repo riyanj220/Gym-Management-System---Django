@@ -1,124 +1,111 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Notifications &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-3">
+        {% include 'user/left_sidebar.html' %}
+      </div>
 
-<style type="text/css">
-    .marked {
-        display: none;
-    }
-
-    .custom-h3 {
-        font-family: 'Helvetica Neue', sans-serif;
-        font-weight: bold;
-    }
-
-    .notif-list li {
-        position: relative; /* Ensures the buttons and icon are positioned relative to the li */
-    }
-
-    .markreadbtn, .marked {
-        position: absolute;
-        right: 10px; /* Adjust as necessary */
-        top: 50%;
-        transform: translateY(-50%); /* Center vertically */
-    }
-
-    .marked {
-        right: 40px; /* Offset the icon slightly left from the "Mark as read" button */
-    }
-
-    .card-header {
-        background-color: #f8f9fa; /* Subtle header background for each notification card */
-        border-bottom: 1px solid #dee2e6;
-        font-weight: bold;
-    }
-
-</style>
-
-<main>
-    <!-- Services -->
-    <section class="container my-4">
-        <div class="row">
-            <div class="col-3">
-                {% include 'user/left_sidebar.html' %}
+      <div class="col-lg-9">
+        <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden">
+          <div class="card-header bg-white p-4 border-bottom d-flex justify-content-between align-items-center">
+            <div>
+              <h4 class="fw-bold mb-1"><i class="bi bi-bell-fill text-warning me-2"></i>Member Notifications</h4>
+              <p class="text-secondary small mb-0">System updates, coach messages, and schedule announcements.</p>
             </div>
+            <span class="badge bg-warning text-dark px-3 py-2 fw-bold">
+              Unread: <span class="total_unread">0</span>
+            </span>
+          </div>
 
-            <div class="col-9">
-                <div class="card mb-4">
-                    <div class="card-header text-center">
-                        <h3 class="custom-h3">Notifications &nbsp;
-                            <span class="badge bg-primary total_unread" style="position: relative; top: -3px;"></span>
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                        <span class="ajaxRes"></span>
-                        <ul class="list-group notif-list"></ul>
-                    </div>
-                </div>
+          <div class="card-body p-4">
+            <div class="ajaxRes text-center py-2 text-muted small" style="display: none;">
+              <div class="spinner-border spinner-border-sm text-primary me-1" role="status"></div> Updating...
             </div>
+            <ul class="list-group list-group-flush notif-list d-flex flex-column gap-2">
+              <li class="list-group-item text-center py-4 text-muted border-0">
+                <div class="spinner-border text-primary" role="status"></div>
+                <div class="mt-2 small">Loading notifications...</div>
+              </li>
+            </ul>
+          </div>
         </div>
-    </section>
-    <!-- End -->
+      </div>
+    </div>
+  </div>
 </main>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        $(".ajaxRes").hide();
+$(document).ready(function(){
+    function loadNotifications() {
+        $.ajax({
+            url: "{% url 'get_notifications' %}",
+            dataType: 'json',
+            beforeSend: function() {
+                $(".ajaxRes").show();
+            },
+            success: function(res) {
+                var _html = '';
+                $(".total_unread").text(res.total_unread);
 
-        setInterval(function(){
-            $.ajax({
-                url: "{% url 'get_notifications' %}",
-                dataType: 'json',
-                beforeSend: function() {
-                    $(".ajaxRes").show();
-                },
-                success: function(res) {
-                    _html = '';
-
-                    $(".total_unread").text(res.total_unread);
-
+                if (res.notifications.length === 0) {
+                    _html = '<li class="list-group-item text-center py-4 text-muted border-0"><i class="bi bi-bell-slash fs-2 d-block mb-2"></i>No notifications yet.</li>';
+                } else {
                     $.each(res.notifications, function(index, d) {
-                        if (d.notifStatus == true) {
-                            _html += '<li class="list-group-item list'+d.pk+'">'+d.notify_detail+
-                                '<button data-index="'+d.pk+'" data-notifications="'+d.pk+'" class="btn btn-sm btn-secondary float-end markreadbtn markreadbtn'+d.pk+'" style="display:none;">Mark as read</button>'+
-                                '<button class="float-end btn btn-success btn-sm marked'+d.pk+'"><i class="bi bi-check-square fs-6"></i></button></li>';
-                        } else {
-                            _html += '<li class="list-group-item bg-light list'+d.pk+'">'+d.notify_detail+
-                                '<button data-index="'+d.pk+'" data-notifications="'+d.pk+'" class="btn btn-sm btn-secondary float-end markreadbtn markreadbtn'+d.pk+'">Mark as read</button>'+
-                                '<button class="float-end btn btn-success btn-sm marked marked'+d.pk+'"><i class="bi bi-check-square fs-6"></i></button></li>';
-                        }
+                        var isUnread = !d.notifStatus;
+                        _html += '<li class="list-group-item d-flex justify-content-between align-items-center p-3 rounded-3 border ' + (isUnread ? 'bg-light border-warning' : 'bg-white') + ' list' + d.pk + '">' +
+                            '<div class="d-flex align-items-center gap-3">' +
+                                '<i class="bi ' + (isUnread ? 'bi-envelope-exclamation-fill text-warning' : 'bi-check2-circle text-success') + ' fs-4"></i>' +
+                                '<span>' + d.notify_detail + '</span>' +
+                            '</div>' +
+                            '<div>' +
+                                '<button data-index="' + d.pk + '" data-notifications="' + d.pk + '" class="btn btn-sm btn-outline-primary markreadbtn markreadbtn' + d.pk + '" ' + (isUnread ? '' : 'style="display:none;"') + '><i class="bi bi-check2"></i> Mark Read</button>' +
+                                '<span class="badge bg-success-subtle text-success marked' + d.pk + '" ' + (isUnread ? 'style="display:none;"' : '') + '><i class="bi bi-check-lg me-1"></i>Read</span>' +
+                            '</div>' +
+                        '</li>';
                     });
-
-                    $(".notif-list").html(_html);
-                    $(".ajaxRes").hide();
                 }
-            });
-        }, 5000);
 
-        // Mark as read Section start
-        $(document).on("click", ".markreadbtn", function() {
-            var _index = $(this).attr("data-index");
-            var _notifications = $(this).attr("data-notifications");
+                $(".notif-list").html(_html);
+                $(".ajaxRes").hide();
+            }
+        });
+    }
 
-            $.ajax({
-                url: "{% url 'mark_read_notifications' %}",
-                data: {
-                    notifications: _notifications
-                },
-                beforeSend: function() {
-                    // Handle loading
-                },
-                success: function(res) {
-                    if (res.bool == true) {
-                        $(".list"+_index).removeClass('bg-light');
-                        $(".markreadbtn"+_index).hide();
-                        $(".marked"+_index).show();
+    // Load immediately on page load
+    loadNotifications();
+
+    // Poll every 6 seconds
+    setInterval(loadNotifications, 6000);
+
+    // Mark as read
+    $(document).on("click", ".markreadbtn", function() {
+        var _index = $(this).attr("data-index");
+        var _notifications = $(this).attr("data-notifications");
+
+        $.ajax({
+            url: "{% url 'mark_read_notifications' %}",
+            data: {
+                notifications: _notifications
+            },
+            success: function(res) {
+                if (res.bool == true) {
+                    $(".list" + _index).removeClass('bg-light border-warning').addClass('bg-white');
+                    $(".markreadbtn" + _index).hide();
+                    $(".marked" + _index).show();
+                    var count = parseInt($(".total_unread").first().text());
+                    if (count > 0) {
+                        $(".total_unread").text(count - 1);
                     }
                 }
-            });
+            }
         });
-        // End
     });
+});
 </script>
-
 {% endblock %}

@@ -1,68 +1,41 @@
 {% extends 'base.html' %}
-{% block content %}
 {% load crispy_forms_tags %}
 
-<main>
-    <section class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-8 col-sm-10">
-                <div class="card shadow-lg border-0">
-                    <div class="card-body p-5">
-                        <h2 class="text-center mb-4 section-heading border-bottom pb-3">Register</h2>
-                        <form method="post" action="{% url 'register' %}">
-                            {% csrf_token %}
-                            {{ form.non_field_errors }}
+{% block title %}Create Account &bull; RJ GYM{% endblock %}
 
-                            <div class="form-group mb-4">
-                                <label for="id_username" class="form-label">Username &nbsp; &nbsp;&nbsp;</label>
-                                {{ form.username }}
-                                <div class="form-text text-muted">
-                                    {{ form.username.help_text }}
-                                </div>
-                                {{ form.username.errors }}
-                            </div>
-
-                            <div class="form-group mb-4">
-                                <label for="id_email" class="form-label">Email &nbsp; &nbsp;&nbsp;</label>
-                                    <div style="display:inline-block; margin-left: 32px;">
-                                        {{ form.email }}
-                                    </div>
-                                <div class="form-text text-muted">
-                                    {{ form.email.help_text }}
-                                </div>
-                                {{ form.email.errors }}
-                            </div>
-
-                            <div class="form-group mb-4">
-                                <label for="id_password1" class="form-label">Password &nbsp; &nbsp;&nbsp;&nbsp;</label>
-                                {{ form.password1 }}
-                                <div class="form-text text-muted">
-                                    {{ form.password1.help_text }}
-                                </div>
-                                {{ form.password1.errors }}
-                            </div>
-
-                            <div class="form-group mb-4">
-                                <label for="id_password2" class="form-label">Confirm Password &nbsp;</label>
-                                {{ form.password2 }}
-                                <div class="form-text text-muted">
-                                    Enter the same password as before, for verification.
-                                </div>
-                                {{ form.password2.errors }}
-                            </div>
-
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-warning btn-block">Register</button>
-                            </div>
-
-                            <br> Already have an account? <a href ="{% url 'login' %}" class ="text-decoration-none">Login here</a>
-                            
-                        </form>
-                    </div>
-                </div>
+{% block content %}
+<main class="py-5">
+  <div class="container my-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8 col-sm-10">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+          <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+              <span class="brand-badge mb-2"><i class="bi bi-person-plus-fill"></i></span>
+              <h2 class="fw-bold mb-1">Join RJ GYM</h2>
+              <p class="text-secondary small">Create your member profile to unlock plans & coaching</p>
             </div>
-        </div>
-    </section>
-</main>
 
+            <form method="post" action="{% url 'register' %}">
+              {% csrf_token %}
+              {{ form|crispy }}
+
+              <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-accent btn-lg fw-bold py-2">
+                  <i class="bi bi-check2-circle me-1"></i> Create Member Account
+                </button>
+              </div>
+
+              <div class="text-center mt-4 pt-3 border-top">
+                <p class="small text-secondary mb-0">
+                  Already have an account? <a href="{% url 'login' %}" class="fw-bold text-decoration-none text-primary">Sign in here</a>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

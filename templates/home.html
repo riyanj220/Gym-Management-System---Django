@@ -1,103 +1,250 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}RJ GYM &bull; Premium Fitness & Strength Center{% endblock %}
+
+{% block extra_head %}
+<!-- Lightbox CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'lightbox2/dist/css/lightbox.min.css' %}"/>
+{% endblock %}
+
 {% block content %}
-    <!-- Main Start -->
-    <main>
-        <!-- Banner Start -->
-        <div id="carouselExampleIndicators" class="carousel slide">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+<main>
+  <!-- Hero Section -->
+  <section class="gym-hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <h1 class="gym-hero-title">
+            Forge Your <span>Ultimate Physique</span> With RJ GYM
+          </h1>
+          <p class="gym-hero-desc">
+            Experience state-of-the-art strength facilities, personalized coaching plans, and an inspiring fitness community designed to accelerate your transformations.
+          </p>
+
+          <div class="d-flex flex-wrap gap-3">
+            <a href="{% url 'pricing' %}" class="btn btn-accent btn-lg px-4 py-3">
+              <i class="bi bi-lightning-charge me-1"></i> View Memberships
+            </a>
+            <a href="{% url 'enquiry' %}" class="btn btn-outline-light btn-lg px-4 py-3">
+              <i class="bi bi-calendar-check me-1"></i> Book Free Trial
+            </a>
+          </div>
+
+          <!-- Feature checkmarks -->
+          <div class="d-flex flex-wrap gap-4 mt-4 pt-2 text-secondary small">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-check-circle-fill text-warning"></i>
+              <span class="text-white">Certified Elite Coaches</span>
             </div>
-            <div class="carousel-inner">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-check-circle-fill text-warning"></i>
+              <span class="text-white">Olympic Lifting Area</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-check-circle-fill text-warning"></i>
+              <span class="text-white">24/7 Smart Access</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carousel -->
+        <div class="col-lg-6">
+          <div class="hero-carousel-wrap">
+            <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500">
+              <div class="carousel-indicators">
                 {% for banner in banners %}
-                <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
-                    <img src="{{banner.img.url}}" class="d-block w-100" alt="Slide {{ forloop.counter }}">
-                    
-                </div>
+                  <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-current="{% if forloop.first %}true{% endif %}" aria-label="Slide {{ forloop.counter }}"></button>
                 {% endfor %}
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+              </div>
+              <div class="carousel-inner">
+                {% for banner in banners %}
+                  <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ banner.img.url }}" class="d-block w-100" alt="{{ banner.alt_text }}">
+                  </div>
+                {% empty %}
+                  <div class="carousel-item active">
+                    <div style="height: 400px; background: #1e293b; display: flex; align-items: center; justify-content: center; color: #94a3b8;">
+                      <h5>RJ GYM Premium Facility</h5>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
-            </button>
+              </button>
+            </div>
+          </div>
         </div>
-        <!-- End Banner -->
+      </div>
 
-        <!-- Services -->
-        <section class="container my-4">
-            <h1 class="text-center mb-4 section-heading">Services</h1>
-            <h6 class="text-center mb-4">What We Offer</h6>
-            <div class="row">
-                {% for services in service %}
-                <div class="col-md-4">
-                    <div class="card shadow-lg">
-                        <img src="{{services.img.url}}" class="card-img-top" alt="{{ services.title }}">
-                        <div class="card-body">
-                            <h3 class="card-title text-center">{{services.title}}</h3>
-                            <p class="card-text">{{services.details}}</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+      <!-- Stats Bar -->
+      <div class="hero-stats-row">
+        <div class="row g-4 text-center text-md-start">
+          <div class="col-6 col-md-3">
+            <div class="hero-stat-card justify-content-center justify-content-md-start">
+              <div class="hero-stat-icon"><i class="bi bi-award-fill"></i></div>
+              <div>
+                <div class="hero-stat-num">8+</div>
+                <div class="hero-stat-label">Years Excellence</div>
+              </div>
             </div>
-        </section>
-        <!-- End Services -->
-
-        <!-- About Us -->
-        <section class="container-fluid bg-light py-4 mt-5 border-top border-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-5">
-                        <h1 class="mb-4 section-heading">About Us</h1>
-                        <p class="lh-base">At RJ GYM, we are passionate about helping you achieve your fitness goals. Established with a vision to create a fitness community that inspires and motivates, our gym offers top-of-the-line equipment, professional trainers, and a wide range of classes to suit every fitness level. Whether you're looking to build strength, lose weight, or just stay active, our personalized programs cater to your individual needs.<br>
-                        Over the years, we have grown from a small fitness center into a hub for fitness enthusiasts who seek a balance of health, wellness, and community spirit. Our commitment to quality training and client satisfaction has made us a trusted name in the fitness industry.</p>
-                        <p><a href="{% url 'static_page' 'about' %}" class="btn btn-info text-white">Read More</a></p>
-                    </div>
-					<div class="col-md-6 offset-1">
-						<h1 class="mb-4 section-heading text-center">Sneak Peek <a href="{% url 'gallery' %}" class="float-end btn btn-info text-white mt-2">View Gallery</a></h1>
-						<div class="card shadow-lg p-3">
-							<div class="gallery d-flex flex-wrap justify-content-center">
-								{% for gallery_image in gallery_images %}
-								<a data-lightbox="home-gallery" href="{{gallery_image.img.url }}">
-									<img src="{{gallery_image.img.url }}" class="img-thumbnail" alt="{{gallery_image.alt_text}}" style="width: 130px; height: 130px; object-fit: cover; margin: 5px;">
-								</a>
-								{% endfor %}
-							</div>
-						</div>
-					</div>
-                </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="hero-stat-card justify-content-center justify-content-md-start">
+              <div class="hero-stat-icon"><i class="bi bi-people-fill"></i></div>
+              <div>
+                <div class="hero-stat-num">1,500+</div>
+                <div class="hero-stat-label">Active Members</div>
+              </div>
             </div>
-        </section>
-        <!-- End About Us -->
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="hero-stat-card justify-content-center justify-content-md-start">
+              <div class="hero-stat-icon"><i class="bi bi-person-badge-fill"></i></div>
+              <div>
+                <div class="hero-stat-num">12+</div>
+                <div class="hero-stat-label">Certified Trainers</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="hero-stat-card justify-content-center justify-content-md-start">
+              <div class="hero-stat-icon"><i class="bi bi-shield-check"></i></div>
+              <div>
+                <div class="hero-stat-num">100%</div>
+                <div class="hero-stat-label">Results Guaranteed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    </main>
-    <!-- End -->
+  <!-- Services Section -->
+  <section class="py-5 my-3">
+    <div class="container">
+      <div class="section-title-wrap">
+        <span class="section-tag">Programs & Services</span>
+        <h2 class="section-heading">Engineered For Peak Performance</h2>
+        <p class="section-subtitle">
+          Comprehensive training pathways structured by exercise physiologists to fit your lifestyle and physique targets.
+        </p>
+      </div>
 
-    <!-- Lightbox CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static 'lightbox2/dist/css/lightbox.min.css' %}"/>
+      <div class="row g-4">
+        {% for s in service %}
+        <div class="col-lg-4 col-md-6">
+          <div class="card service-card card-hover shadow-sm">
+            <div class="service-img-wrap">
+              <img src="{{ s.img.url }}" alt="{{ s.title }}">
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">{{ s.title }}</h3>
+              <p class="card-text mb-4">{{ s.details }}</p>
+              <div class="mt-auto">
+                <a href="{% url 'pricing' %}" class="btn btn-outline-primary btn-sm rounded-pill w-100">
+                  Explore Plans <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 
-    <!-- Lightbox JS -->
-    <script type="text/javascript" src="{% static 'lightbox2/dist/js/lightbox.min.js' %}"></script>
+  <!-- About & Facility Sneak Peek -->
+  <section class="py-5 bg-white border-top border-bottom">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+          <span class="section-tag">About RJ GYM</span>
+          <h2 class="section-heading mb-3">A Training Facility Built Around Results</h2>
+          <p class="text-secondary lh-lg mb-4">
+            Founded with an uncompromising commitment to athletic achievement and sustainable wellness, RJ GYM provides an empowering haven for athletes, professionals, and fitness beginners alike.
+          </p>
+          <div class="d-flex flex-column gap-3 mb-4">
+            <div class="d-flex align-items-start gap-3">
+              <div class="kpi-icon-wrap kpi-icon-accent" style="width: 40px; height: 40px; font-size: 1.1rem;">
+                <i class="bi bi-check-lg"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-1">State-of-the-Art Bio-Mechanic Equipment</h6>
+                <p class="text-muted small mb-0">High-grade free weights, power racks, plate-loaded machines, and isolated resistance tracks.</p>
+              </div>
+            </div>
+            <div class="d-flex align-items-start gap-3">
+              <div class="kpi-icon-wrap kpi-icon-blue" style="width: 40px; height: 40px; font-size: 1.1rem;">
+                <i class="bi bi-chat-heart"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-1">Direct Trainer Messaging & Progress Audits</h6>
+                <p class="text-muted small mb-0">Stay in continuous contact with your assigned trainer through our built-in subscriber messaging platform.</p>
+              </div>
+            </div>
+          </div>
 
-    <style>
-        .card:hover {
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            transition: box-shadow 0.3s ease;
-        }
-        .btn-info {
-            background-color: #17a2b8; /* Customize as needed */
-            border: none;
-        }
-        .btn-info:hover {
-            background-color: #138496; /* Customize as needed */
-            transition: background-color 0.3s ease;
-        }
-    </style>
+          <div class="d-flex gap-3">
+            <a href="{% url 'static_page' 'about' %}" class="btn btn-primary px-4">
+              Learn More <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+            <a href="{% url 'gallery' %}" class="btn btn-outline-secondary px-4">
+              View Gallery
+            </a>
+          </div>
+        </div>
 
+        <div class="col-lg-6">
+          <div class="card p-3 shadow-lg border-0 bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-3 px-2">
+              <h5 class="fw-bold mb-0"><i class="bi bi-images text-warning me-2"></i>Facility Sneak Peek</h5>
+              <a href="{% url 'gallery' %}" class="btn btn-sm btn-outline-primary rounded-pill">All Photos</a>
+            </div>
+            <div class="row g-2">
+              {% for gallery_image in gallery_images|slice:":6" %}
+              <div class="col-4">
+                <a data-lightbox="home-gallery" href="{{ gallery_image.img.url }}" class="d-block overflow-hidden rounded-3 shadow-sm" style="height: 120px;">
+                  <img src="{{ gallery_image.img.url }}" alt="{{ gallery_image.alt_text }}" class="w-100 h-100 object-fit-cover" style="transition: transform 0.3s ease;">
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="py-5" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff;">
+    <div class="container text-center py-4">
+      <span class="section-tag">Start Your Journey</span>
+      <h2 class="text-white fw-bold mb-3">Ready To Transform Your Health & Performance?</h2>
+      <p class="text-secondary mx-auto mb-4" style="max-width: 620px;">
+        Join today with flexible membership options, assigned trainer support, and full facility access.
+      </p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="{% url 'pricing' %}" class="btn btn-accent btn-lg px-4">
+          Choose a Plan <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+        <a href="{% url 'enquiry' %}" class="btn btn-outline-light btn-lg px-4">
+          Ask a Question
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- Lightbox JS -->
+<script type="text/javascript" src="{% static 'lightbox2/dist/js/lightbox.min.js' %}"></script>
 {% endblock %}

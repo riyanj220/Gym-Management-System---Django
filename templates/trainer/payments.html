@@ -1,79 +1,96 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payments & Earnings &bull; Trainer Portal &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-3">
+        {% include 'trainer/left_sidebar.html' %}
+      </div>
 
-<style>
-	.custom-h3 {
-        font-family: 'Helvetica Neue', sans-serif;
-        font-weight: bold;
-    }
-</style>
-<main>
-	<!-- Services -->
-	<section class="container my-4">
-		<div class="row">
-			<div class="col-3">
-				{% include 'trainer/left_sidebar.html' %}
-			</div>
-			<div class="col-9">
-				<h3 class="mb-4 border-bottom pb-1 text-center custom-h3">Payments</h3>
+      <div class="col-lg-9">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 border-bottom pb-3">
+          <div>
+            <h2 class="fw-bold mb-1">Payment History & Compensation</h2>
+            <p class="text-secondary small mb-0">Record of monthly salary disbursements and milestone incentives.</p>
+          </div>
+          <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fw-bold">
+            <i class="bi bi-shield-check me-1"></i> Disbursed by RJ GYM Finance
+          </span>
+        </div>
 
-				<!-- Payment Summary Card -->
-				<div class="card mb-4 shadow">
-					<div class="card-body">
-						<h5 class="card-title">Payment Summary</h5>
-						<p class="card-text">Total Payments: {{ trainer_payments|length }}</p>
-						<p class="card-text">Total Amount: {{ total_amount }}</p>
-					</div>
-				</div>
+        <!-- Summary KPIs -->
+        <div class="row g-3 mb-4">
+          <div class="col-sm-6">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-icon-green">
+                <i class="bi bi-cash-stack"></i>
+              </div>
+              <div>
+                <div class="kpi-title">Total Earned</div>
+                <div class="kpi-value text-success">${{ total_amount|default:"0" }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-icon-blue">
+                <i class="bi bi-receipt-cutoff"></i>
+              </div>
+              <div>
+                <div class="kpi-title">Disbursement Records</div>
+                <div class="kpi-value">{{ trainer_payments|length|default:"0" }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-				<!-- Payments Table -->
-				<table class="table table-bordered table-hover">
-					<thead class="thead-dark">
-						<tr>
-							<th>Amount</th>
-							<th>Deposit Date</th>
-							<th>Remarks</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for tp in trainer_payments %}
-						<tr>
-							<td>{{ tp.amount }}</td>
-							<td>{{ tp.deposit_date }}</td>
-							<td>{{ tp.remarks }}</td>
-						</tr>
-						{% empty %}
-						<tr>
-							<td colspan="3" class="text-center">No payments found.</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</section>
-	<!-- End -->
+        <!-- Payments Table Card -->
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+          <div class="card-header bg-white p-4 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0 text-primary"><i class="bi bi-wallet2 me-2"></i>Deposit Statement</h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="gym-table mb-0">
+                <thead>
+                  <tr>
+                    <th>Disbursed Amount</th>
+                    <th>Deposit Date & Time</th>
+                    <th>Description / Remarks</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for tp in trainer_payments %}
+                  <tr>
+                    <td>
+                      <span class="fw-bold fs-6 text-success">${{ tp.amount }}</span>
+                    </td>
+                    <td class="text-secondary small">{{ tp.deposit_date|date:"M d, Y &bull; h:i A" }}</td>
+                    <td class="text-dark">{{ tp.remarks|default:"Monthly retainer deposit" }}</td>
+                    <td>
+                      <span class="badge bg-success-subtle text-success"><i class="bi bi-check-circle-fill me-1"></i>Settled</span>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="4" class="text-center py-4 text-muted">
+                      <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                      No payment deposits logged yet.
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
-<!-- End -->
-
-<style>
-.card {
-    background-color: #f8f9fa; /* Light background */
-    border: 1px solid #ced4da; /* Border color */
-}
-
-.table {
-    background-color: #ffffff; /* White background for the table */
-}
-
-.table th {
-    background-color: #343a40; /* Dark background for header */
-    color: white; /* White text for header */
-}
-
-.table td {
-    vertical-align: middle; /* Center align cell content */
-}
-</style>
-
 {% endblock %}

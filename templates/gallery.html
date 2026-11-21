@@ -1,59 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Facility Gallery &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="section-title-wrap">
+      <span class="section-tag">Tour Our Facilities</span>
+      <h1 class="section-heading">State-of-the-Art Training Atmosphere</h1>
+      <p class="section-subtitle">
+        Explore our premium weight rooms, high-energy cardio zones, group fitness studios, and member transformation journeys.
+      </p>
+    </div>
 
-
-<style>
-
-.card {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center align the card contents */
-}
-
-.card-img-top {
-    height: 200px; /* Set a fixed height */
-    object-fit: cover; /* Maintain aspect ratio */
-    width: 100%; /* Ensure the image takes full width of the card */
-}
-
-.card-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center align the content in the card body */
-}
-
-.btn-info {
-    background-color: #17a2b8; /* Customize as needed */
-    border: none;
-    margin-top: auto; /* Push the button to the bottom */
-}
-
-.btn-info:hover {
-    background-color: #138496; /* Customize as needed */
-    transition: background-color 0.3s ease;
-}
-</style>
-<main>
-  <!-- Services -->
-  <section class="container my-4">
-      <h1 class="text-center mb-4 section-heading border-bottom pb-2">Gallery</h1>
-      <div class="row">
-        {% for gallerys in gallery %}
-          <div class="col-md-4 mb-4">
-              <div class="card shadow">
-                <img src="{{ gallerys.img.url }}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">{{ gallerys.title }}</h5>
-                  <p class="card-text">{{ gallerys.details }}</p>
-                  <a href="{% url 'gallery_photos' gallerys.id %}" class="btn btn-info text-white">View All</a>
-                </div>
-              </div>
+    <div class="row g-4">
+      {% for gallerys in gallery %}
+      <div class="col-lg-4 col-md-6">
+        <div class="card h-100 shadow-sm card-hover border-0 overflow-hidden">
+          <div class="position-relative overflow-hidden" style="height: 240px;">
+            <img src="{{ gallerys.img.url }}" class="w-100 h-100 object-fit-cover" alt="{{ gallerys.title }}" style="transition: transform 0.4s ease;">
+            <div class="position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(0deg, rgba(15,23,42,0.85) 0%, transparent 100%);">
+              <span class="badge bg-warning text-dark"><i class="bi bi-camera-fill me-1"></i> Album</span>
+            </div>
           </div>
-        {% endfor %}
+          <div class="card-body d-flex flex-column p-4">
+            <h4 class="card-title fw-bold mb-2">{{ gallerys.title }}</h4>
+            <p class="card-text text-secondary mb-4">{{ gallerys.details }}</p>
+            <div class="mt-auto">
+              <a href="{% url 'gallery_photos' gallerys.id %}" class="btn btn-outline-primary w-100 rounded-pill">
+                View Photos <i class="bi bi-arrow-right ms-1"></i>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-  </section>
-  <!-- End -->
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <i class="bi bi-images fs-1 text-muted"></i>
+        <p class="text-muted mt-2">No gallery albums available yet.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </main>
-
-
 {% endblock %}

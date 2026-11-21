@@ -1,144 +1,175 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout &bull; {{ plan_details.title }} &bull; RJ GYM{% endblock %}
+
 {% block content %}
-<style>
-   .table th, .table td {
-    width: 25%; /* Adjust this based on your table layout */
-    text-align: center;
-}
-</style>
-<main>
-    <!-- Services -->
-    <section class="container my-4">
-        <h1 class="text-center mb-4 section-heading border-bottom pb-2">Checkout</h1>
-            <table class="table table-bordered">
-                <thead class="table-warning">
-                    <tr>
-                        <th>Plan</th>
-                        <th>Plan Detail</th>
-                        <th>Payment For</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <table class="table-bordered table">
-                                <tr>
-                                    <th>Name</th>
-                                    <td>{{plan_details.title}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Price</th>
-                                    <td>{{plan_details.price}} $</td>
-                                </tr>
-                                <tr>
-                                    <th>Maximum Members</th>
-                                    <td>{{plan_details.max_members}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Already Registered</th>
-                                    <td>15</td>
-                                </tr>
-                                <tr>
-                                    <th>Remaining Slots</th>
-                                    <td>15</td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <ul class="list-unstyled">
-                                {% for feature in plan_details.subscriptionplansfeatures_set.all %}
-                              <li>{{feature.title}}</li>
-                              {% endfor %}
-                            </ul>
-                        </td>
-                        <td>
-                            <table class="table table-bordered">
-                                <tr>
-                                    <td><input data-planprice="{{plan_details.price}}" data-discount="0" type="radio" id="validity1" name="validity" class="select-validity" value="1" checked/></td>
-                                    <th><label for="validity1">1 Month</label></th>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input data-planprice="{{plan_details.price}}" data-discount="10" type="radio" id="validity2" name="validity" class="select-validity" value="3" /></td>
-                                    <th><label for="validity2">3 Month</label></th>
-                                    <td>10% Off</td>
-                                </tr>
-                                <tr>
-                                    <td><input data-planprice="{{plan_details.price}}" data-discount="20" type="radio" id="validity3" value="6" name="validity" class="select-validity" /></td>
-                                    <th><label for="validity3">6 Month</label></th>
-                                    <td>20% Off</td>
-                                </tr>
-                                <tr>
-                                    <td><input data-planprice="{{plan_details.price}}" data-discount="30" type="radio" id="validity4" value="12" name="validity" class="select-validity" /></td>
-                                    <th><label for="validity4">12 Month</label></th>
-                                    <td>30% Off</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot class="table-info">
-                    <tr>
-                        <td></td>
-                        <th>Total Amount</th>
-                        <td>
-                            <b>
-                                <span class="originalLabel" style="font-size: smaller;">Original:</span>
-                                <span class="originalAmount" style="text-decoration: line-through; margin-right: 10px;">${{plan_details.price}}</span> 
+<main class="py-5">
+  <div class="container">
+    <div class="section-title-wrap mb-4 text-start">
+      <span class="section-tag">Order Summary & Checkout</span>
+      <h1 class="section-heading">Complete Your Membership Subscription</h1>
+    </div>
 
-                                <span class="discountedLabel" style="font-size: smaller;">Discounted:</span>
-                                $<span class="totalAmount">{{plan_details.price}}</span>
-                            </b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"></td>
+    <div class="row g-5">
+      <!-- Left: Plan Details & Duration Selector -->
+      <div class="col-lg-7">
+        <div class="card p-4 shadow-sm mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold mb-0 text-primary">{{ plan_details.title }}</h4>
+            <span class="badge bg-warning text-dark px-3 py-2 fw-bold fs-6">${{ plan_details.price }} / mo</span>
+          </div>
+          <p class="text-secondary small mb-3">
+            Includes full gym access, training facility privileges, locker amenities, and personalized tracking.
+          </p>
 
-                        <td>
-                            <form method="post" action="{% url 'checkout_session' plan_details.id %}">
-                                {% csrf_token %}
-                                <input type="submit" value="Proceed to Payment" class="btn btn-primary" />
-                            </form>    
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-    </section>
+          <h6 class="fw-bold text-dark text-uppercase small mb-2">Included Features:</h6>
+          <ul class="list-unstyled d-flex flex-column gap-2 mb-0">
+            {% for feature in plan_details.subscriptionplansfeatures_set.all %}
+            <li class="d-flex align-items-center gap-2 small text-secondary">
+              <i class="bi bi-check-circle-fill text-success fs-6"></i>
+              <span>{{ feature.title }}</span>
+            </li>
+            {% empty %}
+            <li class="d-flex align-items-center gap-2 small text-secondary">
+              <i class="bi bi-check-circle-fill text-success fs-6"></i>
+              <span>Full Access to All Facilities & Locker Rooms</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Duration Selection -->
+        <div class="card p-4 shadow-sm">
+          <h5 class="fw-bold mb-3"><i class="bi bi-calendar3 me-2 text-warning"></i>Select Membership Duration</h5>
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <label class="form-check p-3 border rounded-3 d-flex align-items-center gap-3 cursor-pointer h-100" style="cursor: pointer;">
+                <input data-planprice="{{ plan_details.price }}" data-discount="0" type="radio" id="validity1" name="validity" class="form-check-input select-validity m-0" value="1" checked>
+                <div>
+                  <div class="fw-bold">1 Month</div>
+                  <div class="text-muted small">Standard monthly billing</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="col-sm-6">
+              <label class="form-check p-3 border rounded-3 d-flex align-items-center gap-3 cursor-pointer h-100" style="cursor: pointer;">
+                <input data-planprice="{{ plan_details.price }}" data-discount="10" type="radio" id="validity2" name="validity" class="form-check-input select-validity m-0" value="3">
+                <div>
+                  <div class="fw-bold">3 Months <span class="badge bg-success ms-1">Save 10%</span></div>
+                  <div class="text-muted small">Quarterly commitment</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="col-sm-6">
+              <label class="form-check p-3 border rounded-3 d-flex align-items-center gap-3 cursor-pointer h-100" style="cursor: pointer;">
+                <input data-planprice="{{ plan_details.price }}" data-discount="20" type="radio" id="validity3" value="6" name="validity" class="form-check-input select-validity m-0">
+                <div>
+                  <div class="fw-bold">6 Months <span class="badge bg-success ms-1">Save 20%</span></div>
+                  <div class="text-muted small">Semi-annual savings</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="col-sm-6">
+              <label class="form-check p-3 border rounded-3 d-flex align-items-center gap-3 cursor-pointer h-100" style="cursor: pointer;">
+                <input data-planprice="{{ plan_details.price }}" data-discount="30" type="radio" id="validity4" value="12" name="validity" class="form-check-input select-validity m-0">
+                <div>
+                  <div class="fw-bold">12 Months <span class="badge bg-success ms-1">Save 30%</span></div>
+                  <div class="text-muted small">Best long-term value</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Pricing Calculation & Stripe Action -->
+      <div class="col-lg-5">
+        <div class="card p-4 shadow-lg border-primary border-2 sticky-top" style="top: 100px;">
+          <h5 class="fw-bold mb-4 border-bottom pb-2">Payment Summary</h5>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Plan Name</span>
+            <span class="fw-semibold">{{ plan_details.title }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Monthly Rate</span>
+            <span>${{ plan_details.price }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Selected Duration</span>
+            <span id="selectedDurationLabel" class="fw-semibold">1 Month</span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2 originalAmountRow" style="display:none;">
+            <span class="text-muted">Standard Price</span>
+            <span class="originalAmount text-decoration-line-through text-muted">${{ plan_details.price }}</span>
+          </div>
+
+          <hr class="my-3">
+
+          <div class="d-flex justify-content-between align-items-baseline mb-4">
+            <span class="h5 fw-bold mb-0">Total Due Today:</span>
+            <div class="text-end">
+              <span class="h3 fw-extrabold text-primary mb-0">$<span class="totalAmount">{{ plan_details.price }}</span></span>
+              <span class="d-block small text-success discountedLabel" style="display:none;">Discount Applied</span>
+            </div>
+          </div>
+
+          <form method="post" action="{% url 'checkout_session' plan_details.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-accent btn-lg w-100 py-3 fw-bold">
+              <i class="bi bi-shield-lock-fill me-2"></i> Proceed to Stripe Payment
+            </button>
+          </form>
+
+          <div class="d-flex align-items-center justify-content-center gap-2 mt-3 text-muted small">
+            <i class="bi bi-lock-fill text-success"></i>
+            <span>Encrypted 256-bit SSL transaction</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
-<!-- End -->
 
 <script type="text/javascript">
 $(document).ready(function(){
     function updatePricing() {
-        var _planPrice = parseFloat($(".select-validity:checked").attr('data-planprice')); // Original price
-        var _planDisc = parseFloat($(".select-validity:checked").attr('data-discount'));   // Discount percentage
-        var _planValid = parseInt($(".select-validity:checked").val());                    // Number of months
+        var _checked = $(".select-validity:checked");
+        var _planPrice = parseFloat(_checked.attr('data-planprice'));
+        var _planDisc = parseFloat(_checked.attr('data-discount'));
+        var _planValid = parseInt(_checked.val());
 
-        var _totalPrice = _planPrice * _planValid;  // Original total price
-
+        var _totalPrice = _planPrice * _planValid;
         var _discountedPrice = _totalPrice;
+
+        var durationNames = {1: '1 Month', 3: '3 Months', 6: '6 Months', 12: '12 Months (1 Year)'};
+        $('#selectedDurationLabel').text(durationNames[_planValid] || (_planValid + ' Months'));
+
         if(_planDisc > 0){
-            _discountedPrice = _totalPrice - (_totalPrice * _planDisc / 100);  // Calculating the discounted price
-            $(".originalAmount").show(); // Show the original price with strikethrough
-            $(".discountedLabel").show(); // Show the discounted label
+            _discountedPrice = _totalPrice - (_totalPrice * _planDisc / 100);
+            $(".originalAmountRow").show();
+            $(".originalAmount").show();
+            $(".discountedLabel").show();
         } else {
             _discountedPrice = _totalPrice;
-            $(".originalAmount").hide(); // Hide the original price with strikethrough for 1-month plan
-            $(".discountedLabel").hide(); // Hide the discounted label for 1-month plan
+            $(".originalAmountRow").hide();
+            $(".originalAmount").hide();
+            $(".discountedLabel").hide();
         }
 
-        // Update the HTML with both original and discounted prices
-        $(".originalAmount").text('$' + _totalPrice.toFixed(2));   // Show original price with a strikethrough
-        $(".totalAmount").text(_discountedPrice.toFixed(2));       // Show discounted price
+        $(".originalAmount").text('$' + _totalPrice.toFixed(2));
+        $(".totalAmount").text(_discountedPrice.toFixed(2));
     }
 
-    // Initialize the state based on the selected radio button
     $(".select-validity:checked").each(updatePricing);
-    
-    // Update pricing on radio button change
-    $(".select-validity").on('click', updatePricing);
+    $(".select-validity").on('change click', updatePricing);
 });
-
 </script>
-
 {% endblock %}

@@ -1,53 +1,36 @@
 {% extends 'base.html' %}
-{% block content %}
 {% load crispy_forms_tags %}
 
-<main>
-    <section class="container my-4">
-        <div class="row">
+{% block title %}Report to Trainer &bull; RJ GYM{% endblock %}
 
-        <div class="col-lg-3 col-md-3">
-            {% include 'user/left_sidebar.html' %}
-        </div>
+{% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-3">
+        {% include 'user/left_sidebar.html' %}
+      </div>
 
-        <div class="col-lg-9 col-md-9">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 col-md-10">
-                    <div class="card shadow-lg border-0">
-                    <div class="card-body p-5">
-                        <h2 class="text-center mb-4 section-heading border-bottom pb-3">Report To Trainer</h2>
-                        
-                        <form method="post" action="{% url 'report_to_trainer' %}">
-                            {% csrf_token %}
-                            {{ form.non_field_errors }}
+      <div class="col-lg-9">
+        <div class="card p-4 p-md-5 border-0 shadow-sm rounded-4 bg-white">
+          <div class="border-bottom pb-3 mb-4">
+            <h2 class="fw-bold mb-1">Send a Progress Report to Trainer</h2>
+            <p class="text-secondary small mb-0">Submit workout feedback, diet adjustments, or fitness inquiries directly to your assigned coach.</p>
+          </div>
 
-                            <div class="form-group mb-4">
-                                <label for="id_old_password" class="form-label ">Select Trainer</label>
-                                <div style="display:inline-block; margin-left: 95px;">
-                                    {{ form.receiver_trainer }}
-                                </div>
-                            </div>
+          <form method="post" action="{% url 'report_to_trainer' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
 
-                            <div class="form-group mb-4">
-                                <label for="id_new_password1" class="form-label col-form-label col-sm-4">Report Message</label>
-                                <div class="col-sm-8">
-                                    {{ form.report_msg }}
-                                </div>
-                                
-                            </div>
-
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-warning btn-block">Submit</button>
-                            </div>
-                            
-                        </form>
-                    </div>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-end mt-4 pt-3 border-top">
+              <button type="submit" class="btn btn-accent px-4 py-2 fw-bold">
+                <i class="bi bi-send-fill me-1"></i> Send Report
+              </button>
             </div>
+          </form>
         </div>
+      </div>
     </div>
-    </section>
+  </div>
 </main>
-
 {% endblock %}

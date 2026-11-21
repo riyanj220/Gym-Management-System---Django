@@ -42,7 +42,7 @@ class TrainerLoginForm(forms.ModelForm):
             'password': forms.PasswordInput(attrs={'placeholder': 'Password'}),
         }
 
-class EditTrainerProfileForm(UserChangeForm):
+class EditTrainerProfileForm(forms.ModelForm):
     class Meta:
         model = models.Trainer
         fields = ['full_name','mobile','address','details','img']

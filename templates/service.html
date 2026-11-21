@@ -1,24 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Training Service &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card p-4 p-md-5 border-0 shadow-sm rounded-4 bg-white">
+          <span class="section-tag mb-2">Service Overview</span>
+          <h1 class="section-heading mb-4">Cardio & High-Intensity Conditioning</h1>
+          <p class="text-secondary lh-lg mb-4">
+            Our science-backed cardiovascular training programs combine metabolic conditioning, interval sprints, and targeted heart-rate zone sessions to maximize calorie expenditure and improve aerobic capacity.
+          </p>
 
-<main>
-    <!-- Services -->
-    <section class="container my-4">
-        <h1 class="text-center mb-4 section-heading border-bottom pb-2">Cardio Service</h1>
-        <p>
-            <img src="imgs/23.jpg" class="img-fluid border-secondary border" />
-        </p>
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-        <ul class="list-group mt-4">
-          <li class="list-group-item">An item</li>
-          <li class="list-group-item">A second item</li>
-          <li class="list-group-item">A third item</li>
-          <li class="list-group-item">A fourth item</li>
-          <li class="list-group-item">And a fifth one</li>
-        </ul>
-    </section>
-    <!-- End -->
+          <h5 class="fw-bold mb-3">Key Highlights:</h5>
+          <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item px-0 py-2"><i class="bi bi-check-circle-fill text-warning me-2"></i> Heart rate zone monitoring with smart feedback</li>
+            <li class="list-group-item px-0 py-2"><i class="bi bi-check-circle-fill text-warning me-2"></i> Low impact rowing and assault air bike circuits</li>
+            <li class="list-group-item px-0 py-2"><i class="bi bi-check-circle-fill text-warning me-2"></i> Dedicated endurance coaching and breathwork protocols</li>
+          </ul>
+
+          <div>
+            <a href="{% url 'pricing' %}" class="btn btn-accent px-4 py-2">View Membership Options</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
-
 {% endblock %}

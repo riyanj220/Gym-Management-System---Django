@@ -1,137 +1,223 @@
 {% load static %}
-
 <!doctype html>
 <html lang="en">
-  <style>
-    .lb-close {
-        position: absolute !important;
-        top: 10px !important;
-        right: 10px !important;
-        bottom: auto !important;
-        left: auto !important;
-    }
-
-.logo-image {
-    margin-right: 10px; /* Add space between logo and text */
-    vertical-align: middle; /* Align vertically with text */
-    height: 40px; /* Adjust the height if needed */
-}
-
-.section-heading {
-            font-family: 'Helvetica Neue', sans-serif;
-            font-weight: bold;
-        }
-    </style>
-
   <head>
-
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>{% block title %}RJ GYM &bull; Premium Fitness & Training Center{% endblock %}</title>
 
-    <!-- Jquery -->
-    <script type = "text/javascript" src="{% static 'jquery-3.7.1.js' %}"></script>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" type="text/css" href="{% static 'node_modules/bootstrap-icons/font/bootstrap-icons.css' %}" />
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    
+    <!-- Bootstrap Icons & FontAwesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <title>Home - RJ GYM</title>
+    <!-- Custom Modern Theme Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="{% static 'jquery-3.7.1.js' %}"></script>
+
+    {% block extra_head %}{% endblock %}
   </head>
   <body>
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg gym-navbar">
       <div class="container">
-        <a class="navbar-brand" href="{% url '' %}">{{logo}} RJ GYM</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <a class="navbar-brand" href="{% url '' %}">
+          {% if logo %}
+            {{ logo }}
+          {% else %}
+            <span class="brand-badge"><i class="bi bi-lightning-charge-fill"></i></span>
+          {% endif %}
+          <span>RJ GYM</span>
+        </a>
+
+        <button class="navbar-toggler text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="bi bi-list fs-2 text-white"></i>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="{% url '' %}">Home</a>
+              <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url '' %}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="{% url 'gallery' %}">Gallery</a>
+              <a class="nav-link {% if '/Gallery' in request.path %}active{% endif %}" href="{% url 'gallery' %}">Gallery</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'pricing' %}">Pricing</a>
+              <a class="nav-link {% if '/Subscription-Plans' in request.path %}active{% endif %}" href="{% url 'pricing' %}">Memberships</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link btn btn-sm btn-dark text-white" href="{% url 'enquiry' %}">Enquiry</a>
+              <a class="nav-link {% if '/pages/about' in request.path %}active{% endif %}" href="{% url 'static_page' 'about' %}">About Us</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link {% if '/Faq' in request.path %}active{% endif %}" href="{% url 'faq' %}">FAQ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if '/pages/contact_us' in request.path %}active{% endif %}" href="{% url 'static_page' 'contact_us' %}">Contact</a>
+            </li>
+          </ul>
 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                My Account
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+          <div class="d-flex align-items-center gap-2">
+            <a class="nav-link btn-enquiry d-none d-sm-inline-block me-1" href="{% url 'enquiry' %}">
+              <i class="bi bi-chat-left-dots-fill me-1"></i> Free Trial
+            </a>
 
-                {% if not user.is_authenticated %}
-                  {% if request.session.trainer_login%}
-                  <li><a class="dropdown-item" href="{% url 'trainer_dashboard' %}">Dashboard</a></li>
-                  <li><a class="dropdown-item" href="{% url 'trainer_logout' %}">Logout</a></li>
-              
+            <!-- Account Menu -->
+            <div class="nav-item dropdown">
+              <button class="btn btn-outline-light btn-sm dropdown-toggle d-flex align-items-center gap-2 py-2 px-3 rounded-pill" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle fs-6 text-warning"></i>
+                <span class="fw-semibold">
+                  {% if user.is_authenticated %}
+                    {{ user.username }}
+                  {% elif request.session.trainer_login %}
+                    Trainer Portal
                   {% else %}
-                  <li><a class="dropdown-item" href="{% url 'trainer_login' %}">Trainer login</a></li>
-                  <li><a class="dropdown-item" href="{% url 'login' %}">User login</a></li>
-                  <li><a class="dropdown-item" href="{% url 'register' %}">User register</a></li>
+                    Account
                   {% endif %}
-
+                </span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userMenuDropdown">
+                {% if not user.is_authenticated %}
+                  {% if request.session.trainer_login %}
+                    <li><span class="dropdown-header">Trainer Session</span></li>
+                    <li><a class="dropdown-item" href="{% url 'trainer_dashboard' %}"><i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="{% url 'trainer_logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                  {% else %}
+                    <li><span class="dropdown-header">Member Access</span></li>
+                    <li><a class="dropdown-item" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right me-2 text-primary"></i>Member Login</a></li>
+                    <li><a class="dropdown-item" href="{% url 'register' %}"><i class="bi bi-person-plus me-2 text-success"></i>Join Now</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><span class="dropdown-header">Staff Access</span></li>
+                    <li><a class="dropdown-item" href="{% url 'trainer_login' %}"><i class="bi bi-person-badge me-2 text-warning"></i>Trainer Portal</a></li>
+                  {% endif %}
                 {% else %}
-                <li><a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a></li>
-                <!-- <li><a class="dropdown-item" href="#">Profile</a></li>  -->
-                <!-- <li><a class="dropdown-item" href="{% url 'update_profile' %}">Settings</a></li> -->
-                <li>
-                  <form action="{% url 'logout' %}" method="POST">
+                  <li><span class="dropdown-header">Signed in as <strong>{{ user.username }}</strong></span></li>
+                  <li><a class="dropdown-item" href="{% url 'dashboard' %}"><i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard</a></li>
+                  <li><a class="dropdown-item" href="{% url 'notifications' %}"><i class="bi bi-bell me-2 text-warning"></i>Notifications</a></li>
+                  <li><a class="dropdown-item" href="{% url 'update_profile' %}"><i class="bi bi-gear me-2 text-secondary"></i>Account Settings</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <form action="{% url 'logout' %}" method="POST" class="m-0 p-0">
                       {% csrf_token %}
-                      <button type="submit" class="dropdown-item">Logout</button>
-                  </form>
-                </li>
+                      <button type="submit" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+                    </form>
+                  </li>
                 {% endif %}
               </ul>
-              
-            </li>
-
-          </ul>
+            </div>
+          </div>
         </div>
-
       </div>
     </nav>
-    <!-- Header End -->
-    {% for message in messages %}
-    <p id="message-timer" class="alert alert-success float-center text-center message-text"> 
-    
+
+    <!-- Global Messages Toast / Alerts -->
+    {% if messages %}
+    <div class="container mt-3">
+      {% for message in messages %}
+      <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% else %}info{% endif %} alert-dismissible fade show shadow-sm d-flex align-items-center" role="alert">
         {% if message.tags == 'success' %}
-            <i class="fa fa-check" aria-hidden="true"></i> &nbsp;
-
+          <i class="bi bi-check-circle-fill fs-5 me-2 text-success"></i>
+        {% elif message.tags == 'error' %}
+          <i class="bi bi-exclamation-triangle-fill fs-5 me-2 text-danger"></i>
+        {% else %}
+          <i class="bi bi-info-circle-fill fs-5 me-2 text-info"></i>
         {% endif %}
-        
-        {{ message }}
+        <div>{{ message }}</div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
 
-    </p>
-    {% endfor %}
-    
+    <!-- Page Body -->
     {% block content %}
     {% endblock %}
 
-    <!-- Footer Start -->
-    <footer class="container py-5">
-      <p class="float-end"><a href="#">Back to top</a></p>
-      <p>© 2017-2024 RJ GYM, Inc. · <a href="{% url 'static_page' 'privacy' %}">Privacy</a> · <a href="{% url 'static_page' 'terms' %}">Terms</a> · <a href="{% url 'faq' %}">FAQ</a> · <a href="{% url 'static_page' 'contact_us' %}">Contact us</a></p>
+    <!-- Modern Dark Footer -->
+    <footer class="gym-footer">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-4 col-md-6">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <span class="brand-badge"><i class="bi bi-lightning-charge-fill"></i></span>
+              <h4 class="text-white fw-bold mb-0">RJ GYM</h4>
+            </div>
+            <p class="text-secondary pe-lg-4" style="line-height: 1.6;">
+              Empowering individuals to break through limits with top-tier fitness facilities, certified elite coaches, and science-backed training programs.
+            </p>
+            <div class="d-flex gap-3 mt-3">
+              <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center;"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center;"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center;"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center;"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-md-6 col-6">
+            <h5>Explore</h5>
+            <ul class="list-unstyled d-flex flex-column gap-2 mb-0">
+              <li><a href="{% url '' %}">Home</a></li>
+              <li><a href="{% url 'pricing' %}">Memberships</a></li>
+              <li><a href="{% url 'gallery' %}">Facility Gallery</a></li>
+              <li><a href="{% url 'static_page' 'about' %}">About Us</a></li>
+              <li><a href="{% url 'enquiry' %}">Book Trial</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-md-6 col-6">
+            <h5>Support</h5>
+            <ul class="list-unstyled d-flex flex-column gap-2 mb-0">
+              <li><a href="{% url 'faq' %}">Help & FAQ</a></li>
+              <li><a href="{% url 'static_page' 'contact_us' %}">Contact Us</a></li>
+              <li><a href="{% url 'static_page' 'privacy' %}">Privacy Policy</a></li>
+              <li><a href="{% url 'static_page' 'terms' %}">Terms & Conditions</a></li>
+              <li><a href="{% url 'trainer_login' %}">Trainer Portal</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <h5>Working Hours & Location</h5>
+            <div class="d-flex flex-column gap-2 text-secondary">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-clock text-warning"></i>
+                <span>Open 24/7 for Registered Members</span>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-person-workspace text-warning"></i>
+                <span>Staffed Hours: Mon - Sat 6:00 AM - 10:00 PM</span>
+              </div>
+              <div class="d-flex align-items-start gap-2 mt-1">
+                <i class="bi bi-geo-alt text-warning mt-1"></i>
+                <span>123 Gym Street, Fitness District, Pakistan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gym-footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+          <p class="mb-0 text-secondary">&copy; 2024 RJ GYM. All rights reserved.</p>
+          <div class="d-flex gap-4">
+            <a href="{% url 'static_page' 'privacy' %}" class="text-secondary small">Privacy</a>
+            <a href="{% url 'static_page' 'terms' %}" class="text-secondary small">Terms</a>
+            <a href="{% url 'faq' %}" class="text-secondary small">FAQ</a>
+            <a href="{% url 'static_page' 'contact_us' %}" class="text-secondary small">Contact</a>
+          </div>
+        </div>
+      </div>
     </footer>
-    <!-- Footer End -->
 
-    <!-- Bootstrap Bundle with Popper -->
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_scripts %}{% endblock %}
   </body>
 </html>

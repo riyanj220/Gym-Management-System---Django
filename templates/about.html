@@ -1,99 +1,119 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}About Us &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="section-title-wrap">
+      <span class="section-tag">Our Story</span>
+      <h1 class="section-heading">Dedicated to Human Performance & Transformation</h1>
+      <p class="section-subtitle">
+        Building stronger, healthier, and more resilient individuals through evidence-based training and genuine community.
+      </p>
+    </div>
 
-<style>
-    .card-img-top {
-    height: 350px; /* Adjust the height as needed */
-    object-fit: cover; /* This will ensure the image covers the area without distortion */
-}
-</style>
-<main>
-    <!-- About Us -->
-    <section class="container my-4">
-        <h1 class="text-center mb-4 section-heading border-bottom pb-2">About Us</h1>
-        <p class="lead text-center">We are dedicated to providing the best fitness experience for our community.</p>
+    <!-- Mission / Vision / Values Cards -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 p-4 rounded-4 card-hover">
+          <div class="kpi-icon-wrap kpi-icon-accent mb-3">
+            <i class="bi bi-compass-fill"></i>
+          </div>
+          <h4 class="fw-bold mb-2">Our Mission</h4>
+          <p class="text-secondary small lh-base mb-0">
+            To inspire and empower members of all backgrounds to push beyond physical limitations with world-class equipment, intelligent coaching, and empathetic support.
+          </p>
+        </div>
+      </div>
 
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Our Mission</h5>
-                        <p class="card-text">To inspire and empower individuals to achieve their fitness goals in a supportive environment.</p>
-                    </div>
-                </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 p-4 rounded-4 card-hover">
+          <div class="kpi-icon-wrap kpi-icon-blue mb-3">
+            <i class="bi bi-eye-fill"></i>
+          </div>
+          <h4 class="fw-bold mb-2">Our Vision</h4>
+          <p class="text-secondary small lh-base mb-0">
+            To redefine community strength training into an inclusive lifestyle movement where mental discipline and physical fitness unite seamlessly.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 p-4 rounded-4 card-hover">
+          <div class="kpi-icon-wrap kpi-icon-green mb-3">
+            <i class="bi bi-gem"></i>
+          </div>
+          <h4 class="fw-bold mb-2">Our Core Values</h4>
+          <p class="text-secondary small lh-base mb-0">
+            Scientific rigor, relentless integrity, mutual respect, and an unwavering commitment to each individual member's long-term wellness.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meet Our Team -->
+    <div class="mt-5 pt-3">
+      <div class="text-center mb-5">
+        <span class="section-tag">Expert Leadership</span>
+        <h2 class="fw-bold">Meet Our Head Coaches</h2>
+        <p class="text-secondary">Certified exercise specialists dedicated to guiding your daily progress.</p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-lg-4 col-md-6">
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden card-hover">
+            <div style="height: 320px;" class="overflow-hidden">
+              <img src="{% static 'images/team_member_1.jpg' %}" class="w-100 h-100 object-fit-cover" alt="Head Strength Coach">
             </div>
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Our Vision</h5>
-                        <p class="card-text">To be a leading fitness center that transforms lives through health and wellness.</p>
-                    </div>
-                </div>
+            <div class="card-body p-4 text-center">
+              <h5 class="fw-bold mb-1">Marcus Vance</h5>
+              <p class="text-warning small fw-bold text-uppercase mb-2">Head Strength & Conditioning Coach</p>
+              <p class="text-secondary small mb-3">CSCS certified with 10+ years coaching collegiate athletes and powerlifters.</p>
+              <div class="d-flex justify-content-center gap-2">
+                <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:32px; height:32px;"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:32px; height:32px;"><i class="fab fa-linkedin-in"></i></a>
+              </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Our Values</h5>
-                        <p class="card-text">Integrity, Respect, Community, and Excellence are at the core of everything we do.</p>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
 
-        <div class="mt-5">
-            <h2 class="text-center">Meet Our Team</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <img src="{% static 'images/team_member_1.jpg' %}" class="card-img-top" alt="Team Member 1">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">John Doe</h5>
-                            <p class="card-text">Head Trainer - With over 10 years of experience, John is committed to helping clients reach their peak performance.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <img src="{% static 'images/team_member_2.jpg' %}" class="card-img-top" alt="Team Member 2">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Jane Smith</h5>
-                            <p class="card-text">Nutritionist - Jane provides personalized nutrition plans to help clients fuel their bodies effectively.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <img src="{% static 'images/team_member_3.jpg' %}" class="card-img-top" alt="Team Member 3">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Mark Johnson</h5>
-                            <p class="card-text">Fitness Coach - Mark specializes in creating customized workout programs that align with individual goals.</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden card-hover">
+            <div style="height: 320px;" class="overflow-hidden">
+              <img src="{% static 'images/team_member_2.jpg' %}" class="w-100 h-100 object-fit-cover" alt="Performance Coach">
             </div>
+            <div class="card-body p-4 text-center">
+              <h5 class="fw-bold mb-1">Elena Rostova</h5>
+              <p class="text-warning small fw-bold text-uppercase mb-2">HIIT & Endurance Director</p>
+              <p class="text-secondary small mb-3">Former marathon runner specializing in metabolic conditioning and functional agility.</p>
+              <div class="d-flex justify-content-center gap-2">
+                <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:32px; height:32px;"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:32px; height:32px;"><i class="fab fa-linkedin-in"></i></a>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="mt-5">
-            <h2 class="text-center">Our Facilities</h2>
-            <ul class="list-group">
-                <li class="list-group-item">State-of-the-art gym equipment</li>
-                <li class="list-group-item">Group fitness classes</li>
-                <li class="list-group-item">Personal training sessions</li>
-                <li class="list-group-item">Nutritional counseling</li>
-                <li class="list-group-item">Relaxation areas</li>
-            </ul>
-        </div>
-
-        <div class="mt-5">
-            <h2 class="text-center">Join Us Today!</h2>
-            <p class="text-center">Become a part of our fitness family and start your journey towards a healthier lifestyle.</p>
-            <div class="text-center">
-                <a href="{% url 'pricing' %}" class="btn btn-primary">View Membership Plans</a>
+        <div class="col-lg-4 col-md-6">
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden card-hover">
+            <div style="height: 320px;" class="overflow-hidden">
+              <img src="{% static 'images/team_member_3.jpg' %}" class="w-100 h-100 object-fit-cover" alt="Nutrition Director">
             </div>
+            <div class="card-body p-4 text-center">
+              <h5 class="fw-bold mb-1">Dr. David Chen</h5>
+              <p class="text-warning small fw-bold text-uppercase mb-2">Nutrition & Biomechanics Lead</p>
+              <p class="text-secondary small mb-3">PhD in Sports Nutrition focusing on sustainable body recomposition and recovery.</p>
+              <div class="d-flex justify-content-center gap-2">
+                <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:32px; height:32px;"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:32px; height:32px;"><i class="fab fa-linkedin-in"></i></a>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
-    <!-- End -->
+      </div>
+    </div>
+  </div>
 </main>
-
 {% endblock %}

@@ -1,58 +1,89 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Contact & Location &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="section-title-wrap">
+      <span class="section-tag">Reach Out</span>
+      <h1 class="section-heading">Visit Us or Connect Today</h1>
+      <p class="section-subtitle">
+        We're located in the heart of the city with dedicated parking and rapid transit access.
+      </p>
+    </div>
 
-<main>
-    <!-- Contact Us Section -->
-    <section class="container my-4">
-        <h1 class="text-center mb-4 section-heading border-bottom pb-2">Contact Us</h1>
+    <div class="row g-4 align-items-stretch">
+      <!-- Contact Information Cards -->
+      <div class="col-lg-5">
+        <div class="card p-4 p-md-5 h-100 shadow-sm border-0 rounded-4">
+          <h3 class="fw-bold mb-4">Facility Information</h3>
 
-        <div class="row">
-            <!-- Map on the Left -->
-            <div class="col-md-6">
-                <div style="overflow:hidden;max-width:100%;width:100%;height:400px;">
-                    <div id="gmap-canvas" style="height:100%; width:100%;max-width:100%;">
-                        <iframe style="height:100%;width:100%;border:0;" frameborder="0" 
-                                src="https://www.google.com/maps/embed/v1/place?q=pakistan&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"
-                                allowfullscreen></iframe>
-                    </div>
-                </div>
+          <div class="d-flex flex-column gap-4">
+            <div class="d-flex gap-3">
+              <div class="kpi-icon-wrap kpi-icon-accent">
+                <i class="bi bi-geo-alt-fill"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-1">Our Address</h6>
+                <p class="text-secondary small mb-0">123 Gym Street, Fitness District, Pakistan</p>
+              </div>
             </div>
 
-            <!-- Static Contact Information on the Right -->
-            <div class="col-md-6">
-                <h4 class="mb-3 text-center">Information</h4>
-                <div class="card shadow-lg p-3">
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <th scope="row">Email</th>
-                                <td>example@email.com</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Website</th>
-                                <td><a href="https://www.example.com" target="_blank">www.example.com</a></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Phone Number</th>
-                                <td>+92 123 456 7890</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Address</th>
-                                <td>123 Gym Street, Fitness City, Pakistan</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Social Media</th>
-                                <td>
-                                    <a href="#" target="_blank">Facebook</a>, 
-                                    <a href="#" target="_blank">Instagram</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="d-flex gap-3">
+              <div class="kpi-icon-wrap kpi-icon-blue">
+                <i class="bi bi-envelope-fill"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-1">Email Support</h6>
+                <p class="text-secondary small mb-0"><a href="mailto:support@rjgym.com" class="text-decoration-none text-secondary">support@rjgym.com</a></p>
+                <p class="text-secondary small mb-0"><a href="mailto:memberships@rjgym.com" class="text-decoration-none text-secondary">memberships@rjgym.com</a></p>
+              </div>
             </div>
+
+            <div class="d-flex gap-3">
+              <div class="kpi-icon-wrap kpi-icon-green">
+                <i class="bi bi-telephone-fill"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-1">Direct Phone</h6>
+                <p class="text-secondary small mb-0">+92 (300) 123-4567</p>
+                <p class="text-secondary small mb-0">Mon &ndash; Sat: 6:00 AM &ndash; 10:00 PM</p>
+              </div>
+            </div>
+
+            <div class="d-flex gap-3">
+              <div class="kpi-icon-wrap kpi-icon-accent">
+                <i class="bi bi-clock-fill"></i>
+              </div>
+              <div>
+                <h6 class="fw-bold mb-1">Gym Hours</h6>
+                <p class="text-secondary small mb-0">Members: <strong>24/7 Access</strong> with Keycard</p>
+                <p class="text-secondary small mb-0">Front Desk: Mon - Sat 6:00 AM - 10:00 PM</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-top">
+            <a href="{% url 'enquiry' %}" class="btn btn-accent w-100 py-2">
+              <i class="bi bi-chat-left-dots-fill me-2"></i> Send an Online Enquiry
+            </a>
+          </div>
         </div>
-    </section>
+      </div>
+
+      <!-- Google Maps Embed -->
+      <div class="col-lg-7">
+        <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden" style="min-height: 420px;">
+          <iframe style="height:100%; width:100%; min-height:420px; border:0;" 
+                  src="https://maps.google.com/maps?q=islamabad+pakistan&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  loading="lazy"
+                  allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 {% endblock %}

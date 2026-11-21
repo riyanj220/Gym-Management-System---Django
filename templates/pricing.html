@@ -1,81 +1,137 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load purchased_package %}
-{% block content %}
 {% load mathfilters %}
 
-<style>
-    .card {
-      height: 100%;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s;
-    }
+{% block title %}Memberships & Pricing &bull; RJ GYM{% endblock %}
 
-    .card:hover {
-      transform: translateY(-5px);
-    }
-</style>
+{% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="section-title-wrap">
+      <span class="section-tag">Flexible Memberships</span>
+      <h1 class="section-heading">Transparent Plans For Every Fitness Goal</h1>
+      <p class="section-subtitle">
+        Invest in your strength and long-term health with zero hidden fees. Upgrade or cancel anytime.
+      </p>
+    </div>
 
-<section class="container my-4">
-  <h1 class="text-center mb-4 section-heading border-bottom pb-2">Subscription Plans</h1>
-  <main>
-      <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-          {% for pricings in pricing %}
-          <div class="col">
-              <div class="card mb-4 rounded-3 shadow {% if pricings.highlight_status %} border-primary {% endif %}">
-                  {% if pricings.highlight_status %}
-                  <div class="card-header py-3 text-white bg-primary border-primary">
-                      <h4 class="my-0 fw-normal">{{ pricings.title }}</h4>
-                  </div>
-                  {% else %}
-                  <div class="card-header py-3">
-                      <h4 class="my-0 fw-normal">{{ pricings.title }}</h4>
-                  </div>
-                  {% endif %}
-                  <div class="card-body d-flex flex-column">
-                    <h1 class="card-title pricing-card-title">${{ pricings.price }} 
-                        <small class="text-muted fw-light"> / {{ pricings.validity }} days</small>
-                    </h1>
-                    <p class="text-success">Maximum capacity: <b>{{ pricings.max_members|sub:pricings.registered_members }}</b></p>
-                    <ul class="list-unstyled mt-3 mb-4">
-                        {% for features in pricings.subscriptionplansfeatures_set.all %}
-                        <li><strong><b>.</b></strong> {{ features.title }}</li>
-                        {% endfor %}
-                    </ul>
-                    <div class="mt-auto">
-                        
-                        {% if user.is_authenticated %}
-                            {% check_purchased_package request.user.id as has_purchased_any_plan %}
-                            {% check_purchased_package request.user.id pricings.id as checkpackage %}
-
-                            {% if checkpackage %}
-                                {% if is_expired %}
-                                    <!-- Allow renewing the expired plan -->
-                                    <a href="{% url 'checkout' pricings.id %}" class="w-100 btn btn-lg btn-outline-primary">Get Started</a>
-                                {% else %}
-                                    <!-- If plan is active, show purchased button -->
-                                    <a href="#" class="w-100 btn btn-lg btn-dark disabled">Purchased</a>
-                                {% endif %}
-                            {% elif has_purchased_any_plan %}
-                                {% if is_expired %}
-                                    <!-- If any plan is expired, allow purchasing new plan -->
-                                    <a href="{% url 'checkout' pricings.id %}" class="w-100 btn btn-lg btn-outline-primary">Get started</a>
-                                {% else %}
-                                    <!-- Disable other plans if there's an active plan -->
-                                    <a href="#" class="w-100 btn btn-lg btn-outline-secondary disabled">Unavailable</a>
-                                {% endif %}
-                            {% else %}
-                                <!-- If no plan is purchased, allow purchasing -->
-                                <a href="{% url 'checkout' pricings.id %}" class="w-100 btn btn-lg btn-outline-primary">Get started</a>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                </div>
-              </div>
+    <!-- Pricing Grid -->
+    <div class="row g-4 justify-content-center mb-5">
+      {% for pricings in pricing %}
+      <div class="col-lg-4 col-md-6">
+        <div class="pricing-card {% if pricings.highlight_status %}featured{% endif %}">
+          {% if pricings.highlight_status %}
+          <div class="pricing-badge-popular">
+            <i class="bi bi-star-fill me-1"></i> Most Popular
           </div>
-          {% endfor %}
-      </div>
-  </main>
-</section>
+          {% endif %}
 
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h3 class="pricing-title mb-0">{{ pricings.title }}</h3>
+            {% if pricings.highlight_status %}
+              <span class="badge bg-warning text-dark"><i class="bi bi-fire"></i> Best Value</span>
+            {% endif %}
+          </div>
+
+          <div class="pricing-price-wrap">
+            <span class="pricing-currency">$</span>
+            <span class="pricing-amount">{{ pricings.price }}</span>
+            <span class="pricing-period">/ {{ pricings.validity }} days</span>
+          </div>
+
+          <div class="pricing-capacity">
+            <i class="bi bi-people-fill me-1 text-primary"></i>
+            Slots remaining: <strong class="text-dark">{{ pricings.max_members|sub:pricings.registered_members }}</strong>
+          </div>
+
+          <!-- Features List -->
+          <ul class="pricing-features-list">
+            {% for feature in pricings.subscriptionplansfeatures_set.all %}
+            <li>
+              <i class="bi bi-check-circle-fill"></i>
+              <span>{{ feature.title }}</span>
+            </li>
+            {% empty %}
+              <li><i class="bi bi-check-circle-fill"></i> Full Gym Facility Access</li>
+              <li><i class="bi bi-check-circle-fill"></i> Locker & Shower Facilities</li>
+            {% endfor %}
+          </ul>
+
+          <!-- Action Button -->
+          <div class="mt-auto pt-3 border-top">
+            {% if user.is_authenticated %}
+              {% check_purchased_package request.user.id as has_purchased_any_plan %}
+              {% check_purchased_package request.user.id pricings.id as checkpackage %}
+
+              {% if checkpackage %}
+                {% if is_expired %}
+                  <a href="{% url 'checkout' pricings.id %}" class="btn btn-accent w-100 py-2">
+                    <i class="bi bi-arrow-repeat me-1"></i> Renew Subscription
+                  </a>
+                {% else %}
+                  <button class="btn btn-secondary w-100 py-2" disabled>
+                    <i class="bi bi-check2-all me-1"></i> Current Active Plan
+                  </button>
+                {% endif %}
+              {% elif has_purchased_any_plan %}
+                {% if is_expired %}
+                  <a href="{% url 'checkout' pricings.id %}" class="btn btn-outline-primary w-100 py-2">
+                    Switch to This Plan
+                  </a>
+                {% else %}
+                  <button class="btn btn-outline-secondary w-100 py-2" disabled title="You already have an active plan">
+                    Unavailable (Plan Active)
+                  </button>
+                {% endif %}
+              {% else %}
+                <a href="{% url 'checkout' pricings.id %}" class="btn {% if pricings.highlight_status %}btn-accent{% else %}btn-primary{% endif %} w-100 py-2">
+                  Get Started <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+              {% endif %}
+            {% else %}
+              <a href="{% url 'login' %}?next={% url 'pricing' %}" class="btn {% if pricings.highlight_status %}btn-accent{% else %}btn-primary{% endif %} w-100 py-2">
+                Sign in to Subscribe <i class="bi bi-box-arrow-in-right ms-1"></i>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Assurance Banner -->
+    <div class="card bg-white border rounded-4 p-4 shadow-sm text-center">
+      <div class="row g-4 align-items-center">
+        <div class="col-md-4">
+          <div class="d-flex align-items-center justify-content-center gap-3">
+            <i class="bi bi-shield-check fs-2 text-warning"></i>
+            <div class="text-start">
+              <h6 class="fw-bold mb-0">Secure Stripe Checkout</h6>
+              <small class="text-muted">End-to-end 256-bit encryption</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="d-flex align-items-center justify-content-center gap-3">
+            <i class="bi bi-arrow-repeat fs-2 text-primary"></i>
+            <div class="text-start">
+              <h6 class="fw-bold mb-0">No Long-Term Contracts</h6>
+              <small class="text-muted">Cancel or pause anytime with ease</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="d-flex align-items-center justify-content-center gap-3">
+            <i class="bi bi-headset fs-2 text-success"></i>
+            <div class="text-start">
+              <h6 class="fw-bold mb-0">24/7 Member Support</h6>
+              <small class="text-muted">Dedicated concierge and trainers</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

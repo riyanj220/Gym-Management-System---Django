@@ -1,59 +1,55 @@
-<style>
-    .list-group {
-        margin-top: 0; /* Ensure consistent margin */
-    }
-    .left-sidebar {
-        position: sticky;
-        top: 0;
-    }
-    .list-group-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .list-group-item i {
-        font-size: 1.5rem; /* Icon size */
-    }
-    .name-label {
-        font-weight: bold;
-        font-size: 1.2rem;
-        color: #007bff;
-        text-align: center;
-        border: 2px solid #007bff;
-        border-radius: 5px;
-        padding: 5px;
-        text-transform: capitalize;
-    }
-</style>
+<!-- Trainer Portal Left Sidebar -->
+<div class="sidebar-profile-card">
+  <div class="sidebar-avatar-placeholder" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a;">
+    <i class="bi bi-person-workspace"></i>
+  </div>
+  <h6 class="fw-bold mb-1 text-dark">{{ request.session.trainer_login|default:"Trainer"|capfirst }}</h6>
+  <span class="badge bg-warning-subtle text-dark border border-warning-subtle small">
+    <i class="bi bi-shield-check me-1"></i> Staff Trainer
+  </span>
+</div>
 
+<div class="sidebar-nav">
+  <a href="{% url 'trainer_dashboard' %}" class="sidebar-nav-item {% if request.path == '/Trainer-Dashboard' %}active{% endif %}">
+    <i class="bi bi-speedometer2"></i>
+    <span>Dashboard</span>
+  </a>
 
-<div class="list-group">
-    <a href="{% url 'trainer_dashboard' %}" class="list-group-item {% if request.path == '/Trainer-Dashboard' %} active {% endif %}">
-        <i class="bi bi-house"></i> Dashboard
-    </a>
-    <a href="{% url 'trainer_assigned_subscribers'%}" class="list-group-item {% if request.path == '/Assigned-Subscribers' %} active {% endif %}">
-        <i class="bi bi-people"></i> My Subscribers
-    </a>
-    <a href="{% url 'trainer_payments' %}" class="list-group-item {% if request.path == '/Payments' %} active {% endif %}">
-        <i class="bi bi-cash"></i> Payments
-    </a>
+  <a href="{% url 'trainer_assigned_subscribers' %}" class="sidebar-nav-item {% if request.path == '/Assigned-Subscribers' %}active{% endif %}">
+    <i class="bi bi-people"></i>
+    <span>My Subscribers</span>
+  </a>
 
-    <a href="{% url 'trainer_default_chat' %}" class="list-group-item {% if '/Trainer-Chat/' in request.path %} active {% endif %}">
-        <i class="bi bi-chat-dots"></i> Chat 
-        <!-- <span class="float-end badge bg-info mt-1 ms-auto">123</span>    -->
-    </a>
-    
-    <a href="{% url 'trainer_notifications' %}" class="list-group-item {% if request.path == '/Trainer-Notifications' %} active {% endif %}">
-        <i class="bi bi-bell"></i> Notifications 
-        <span class="float-end badge bg-info mt-1 ms-auto">{{unread_count}}</span>
-    </a>
-    <a href="{% url 'trainer_change_password' %}" class="list-group-item {% if request.path == '/Change-Password' %} active {% endif %}">
-        <i class="bi bi-lock"></i> Change Password
-    </a>
-    <a href="{% url 'report_to_user' %}" class="list-group-item {% if request.path == '/Report-to-user' %} active {% endif %}">
-        <i class="bi bi-flag"></i> Report to Users
-    </a>
-    <a href="{% url 'trainer_edit_profile' %}" class="list-group-item {% if request.path == '/Account-Settings' %} active {% endif %}">
-        <i class="bi bi-gear"></i> Settings
-    </a>
+  <a href="{% url 'trainer_payments' %}" class="sidebar-nav-item {% if request.path == '/Payments' %}active{% endif %}">
+    <i class="bi bi-cash-stack"></i>
+    <span>Payments</span>
+  </a>
+
+  <a href="{% url 'trainer_default_chat' %}" class="sidebar-nav-item {% if '/Trainer-Chat/' in request.path or request.path == '/Trainer-Default-Chat/' %}active{% endif %}">
+    <i class="bi bi-chat-dots"></i>
+    <span>Member Chat</span>
+  </a>
+
+  <a href="{% url 'trainer_notifications' %}" class="sidebar-nav-item {% if request.path == '/Trainer-Notifications' %}active{% endif %}">
+    <i class="bi bi-bell"></i>
+    <span>Notifications</span>
+    {% if unread_count %}
+      <span class="sidebar-nav-badge">{{ unread_count }}</span>
+    {% endif %}
+  </a>
+
+  <a href="{% url 'report_to_user' %}" class="sidebar-nav-item {% if request.path == '/Report-to-user' %}active{% endif %}">
+    <i class="bi bi-journal-text"></i>
+    <span>Report to User</span>
+  </a>
+
+  <a href="{% url 'trainer_edit_profile' %}" class="sidebar-nav-item {% if request.path == '/Account-Settings' %}active{% endif %}">
+    <i class="bi bi-person-gear"></i>
+    <span>Edit Profile</span>
+  </a>
+
+  <a href="{% url 'trainer_change_password' %}" class="sidebar-nav-item {% if request.path == '/Change-Password' %}active{% endif %}">
+    <i class="bi bi-key"></i>
+    <span>Security</span>
+  </a>
 </div>

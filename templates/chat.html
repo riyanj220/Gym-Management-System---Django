@@ -1,165 +1,156 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Chat Messenger &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Left Sidebar -->
+      <div class="col-lg-3">
+        {% if request.session.trainerid %}
+          {% include 'trainer/left_sidebar.html' %}
+        {% else %}
+          {% include 'user/left_sidebar.html' %}
+        {% endif %}
+      </div>
 
-<style>
-    .chat-container {
-        border: 1px solid #ddd;
-        padding: 10px;
-        max-height: 400px;
-        overflow-y: auto;
-        margin-bottom: 10px;
-    }
-    .chat-message {
-        margin-bottom: 10px;
-    }
-    .chat-message.sent {
-        text-align: right;
-    }
-    .chat-message.received {
-        text-align: left;
-    }
-    .chat-message .sender {
-        font-weight: bold;
-    }
-    .chat-input {
-        display: flex;
-        align-items: center;
-    }
-    .chat-input input {
-        flex-grow: 1;
-        margin-right: 10px;
-    }
-</style>
-
-<main>
-    <section class="container my-4">
-        <div class="row">
-            
-            <div class="col-3">
-                {% if request.session.trainerid %}
-                    {% include 'trainer/left_sidebar.html' %}
-                {%else %}
-                    {% include 'user/left_sidebar.html' %}
-                {% endif %}
+      <!-- Chat Area -->
+      <div class="col-lg-9">
+        <div class="chat-window">
+          <!-- Chat Header -->
+          <div class="chat-header">
+            <div class="d-flex align-items-center gap-3 flex-grow-1">
+              <div class="position-relative">
+                <span class="brand-badge" style="width: 44px; height: 44px; font-size: 1.25rem;">
+                  <i class="bi bi-chat-quote-fill"></i>
+                </span>
+                <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+              </div>
+              <div>
+                <h5 class="fw-bold mb-0">
+                  {% if request.session.trainerid %}
+                    Subscriber Communication
+                  {% else %}
+                    Direct Coach Channel
+                  {% endif %}
+                </h5>
+                <small class="text-secondary">
+                  {% if request.session.trainerid %}
+                    Active conversation with {{ selected_subscriber|default:"Subscriber" }}
+                  {% else %}
+                    Active conversation with Coach {{ trainer.full_name|default:trainer.username }}
+                  {% endif %}
+                </small>
+              </div>
             </div>
-            <div class="col-9">
-                {% if user.is_authenticated %}
-                <h3 class="mb-4 border-bottom pb-1 text-center">Chat with trainer</h3>
-                {%endif %}
-                {% if request.session.trainerid %}
-                <h3 class="mb-4 border-bottom pb-1 text-center">Chat with subscribers</h3>
-                <div class="mb-3">
-                    <label for="subscriberSelect" class="form-label">Select Subscriber:</label>
-                    <select class="form-select" id="subscriberSelect" onchange="window.location.href = this.value;">
-                        {% for subscriber in subscribers %}
-                            <option value="{% url 'trainer_chat' subscriber.id %}" {% if subscriber.id == selected_subscriber.id %}selected{% endif %}>
-                                {{ subscriber }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                {% endif %}
 
-                <!-- Chat Messages -->
-                <div class="chat-container" id="chatContainer">
-                    <!-- Messages will be appended here -->
-                </div>
-
-                <div class="chat-input">
-                    <input type="text" class="form-control" id="messageInput" placeholder="Type your message...">
-                    <button class="btn btn-primary" id="sendMessageButton">Send</button>
-                </div>
+            {% if request.session.trainerid %}
+            <div style="min-width: 220px;">
+              <select class="form-select form-select-sm" id="subscriberSelect" onchange="window.location.href = this.value;">
+                {% for subscriber in subscribers %}
+                  <option value="{% url 'trainer_chat' subscriber.id %}" {% if subscriber.id == selected_subscriber.id %}selected{% endif %}>
+                    {{ subscriber }}
+                  </option>
+                {% endfor %}
+              </select>
             </div>
+            {% endif %}
+          </div>
+
+          <!-- Messages Container -->
+          <div class="chat-messages" id="chatContainer">
+            <div class="text-center my-3">
+              <span class="badge bg-secondary-subtle text-secondary px-3 py-1 rounded-pill small">
+                <i class="bi bi-shield-lock me-1"></i> End-to-end encrypted direct channel started
+              </span>
+            </div>
+            <!-- Messages appended dynamically -->
+          </div>
+
+          <!-- Chat Input Footer -->
+          <div class="chat-footer">
+            <div class="d-flex gap-2 align-items-center">
+              <input type="text" class="form-control" id="messageInput" placeholder="Type a message to your coach..." autocomplete="off">
+              <button class="btn btn-accent px-4 fw-bold" id="sendMessageButton">
+                <i class="bi bi-send-fill me-1"></i> Send
+              </button>
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
 </main>
 
-
 {% if request.session.trainerid %}
-    <!-- Trainer WebSocket configuration -->
-    <input type="hidden" id="roomName" value="Trainer-Chat/{{ selected_subscriber.id }}">
-    <input type="hidden" id="sender" value="{{request.session.trainerid}}">
-    <input type="hidden" id="receiver" value="{{selected_subscriber.id}}">
-    <input type="hidden" id="receiver_name" value="{{selected_subscriber}}">
+  <input type="hidden" id="roomName" value="Trainer-Chat/{{ selected_subscriber.id }}">
+  <input type="hidden" id="sender" value="{{ request.session.trainerid }}">
+  <input type="hidden" id="receiver" value="{{ selected_subscriber.id }}">
+  <input type="hidden" id="receiver_name" value="{{ selected_subscriber }}">
 {% else %}
-    <!-- Subscriber WebSocket configuration -->
-    <input type="hidden" id="roomName" value="Subscriber-Chat/{{ subscriber_id }}">
-    <input type="hidden" id="sender" value="{{subscriber.id}}">
-    <input type="hidden" id="receiver" value="{{trainer.id}}">
-    <input type="hidden" id="receiver_name" value="{{trainer.username}}">
+  <input type="hidden" id="roomName" value="Subscriber-Chat/{{ subscriber_id }}">
+  <input type="hidden" id="sender" value="{{ subscriber.id }}">
+  <input type="hidden" id="receiver" value="{{ trainer.id }}">
+  <input type="hidden" id="receiver_name" value="{{ trainer.username }}">
 {% endif %}
 
 <script>
-    // WebSocket connection
-    const roomName = document.getElementById('roomName').value;
-    const wsUrl = `ws://127.0.0.1:8000/ws/${roomName}/`;
-    const chatSocket = new WebSocket(wsUrl);
+  const roomName = document.getElementById('roomName').value;
+  const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+  const wsUrl = `${protocol}${window.location.host}/ws/${roomName}/`;
+  const chatSocket = new WebSocket(wsUrl);
 
-    // DOM elements
-    const chatContainer = document.getElementById('chatContainer');
-    const messageInput = document.getElementById('messageInput');
-    const sendMessageButton = document.getElementById('sendMessageButton');
-    const receiver = document.getElementById('receiver').value;
+  const chatContainer = document.getElementById('chatContainer');
+  const messageInput = document.getElementById('messageInput');
+  const sendMessageButton = document.getElementById('sendMessageButton');
+  const receiver = document.getElementById('receiver').value;
 
-    // Function to append message to chat container
-    function appendMessage(senderId, message, type) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('chat-message', type);
+  function appendMessage(senderId, message, type) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('chat-bubble', type);
 
-        const currentUserId = document.getElementById('sender').value;
-        let displaySender;
+      const currentUserId = document.getElementById('sender').value;
+      let displaySender;
 
-        // If the message is from the current user (senderId matches current user), show "You"
-        if (senderId === currentUserId) {
-            displaySender = 'You';
-        } else {
-            // If the message is from the other person (receiver), show their actual name
-            displaySender = document.getElementById('receiver_name').value;
-        }
+      if (senderId === currentUserId) {
+          displaySender = 'You';
+      } else {
+          displaySender = document.getElementById('receiver_name').value;
+      }
 
-        messageDiv.innerHTML = `<span class="sender">${displaySender}:</span><p>${message}</p>`;
-        chatContainer.appendChild(messageDiv);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
+      messageDiv.innerHTML = `<div class="fw-bold small mb-1 opacity-75">${displaySender}</div><div>${message}</div>`;
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
 
+  chatSocket.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      const sender = data.sender;
+      if (sender !== document.getElementById('sender').value) {
+          appendMessage(sender, data.message, 'received');
+      }
+  };
 
-    chatSocket.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        const sender = data.sender;
+  sendMessageButton.onclick = function() {
+      const message = messageInput.value.trim();
+      const sender = document.getElementById('sender').value;
 
-        if (sender !== document.getElementById('sender').value) {
-            appendMessage(sender, data.message, 'received');
-        }
-    };
+      if (message) {
+          appendMessage(sender, message, 'sent');
+          chatSocket.send(JSON.stringify({
+              'message': message,
+              'sender': sender  
+          }));
+          messageInput.value = '';
+      }
+  };
 
-
-    // Send message when button is clicked
-    sendMessageButton.onclick = function() {
-        const message = messageInput.value;
-        const sender = document.getElementById('sender').value;
-
-        if (message.trim()) {
-            // Append the current user's message with "You" as the sender
-            appendMessage(sender, message, 'sent');
-
-            // Send the message via WebSocket
-            chatSocket.send(JSON.stringify({
-                'message': message,
-                'sender': sender  
-            }));
-
-            messageInput.value = '';  // Clear the input field
-        }
-    };
-
-    
-    messageInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            sendMessageButton.click();
-        }
-    });
-
+  messageInput.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+          sendMessageButton.click();
+      }
+  });
 </script>
-
 {% endblock %}

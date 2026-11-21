@@ -1,71 +1,61 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Book a Free Trial & Enquiry &bull; RJ GYM{% endblock %}
+
 {% block content %}
-<style>
-    body {
-        background-color: #f8f9fa; /* Light background for contrast */
-    }
+<main class="py-5">
+  <div class="container">
+    <div class="section-title-wrap">
+      <span class="section-tag">Get In Touch</span>
+      <h1 class="section-heading">Claim Your Free 3-Day Guest Pass</h1>
+      <p class="section-subtitle">
+        Have questions about memberships or want to schedule a personalized facility walkthrough? Send us a quick note below.
+      </p>
+    </div>
 
-    .section-heading {
-        font-weight: bold;
-        color: #343a40; /* Dark text for better readability */
-    }
-
-    .btn-info {
-        background-color: #17a2b8; /* Customize as needed */
-        border: none;
-        margin-top: 20px; /* Space above the button */
-        width: 100%; /* Full width for the button */
-        transition: background-color 0.3s ease, transform 0.2s; /* Smooth transitions */
-    }
-
-    .btn-info:hover {
-        background-color: #138496; /* Customize as needed */
-        transform: translateY(-2px); /* Lift effect on hover */
-    }
-
-    .form-group {
-        margin-bottom: 15px; /* Space between form fields */
-    }
-
-    .table {
-        border: none; /* Remove borders for a cleaner look */
-    }
-
-    .table td {
-        padding: 15px; /* Padding inside table cells */
-        vertical-align: middle; /* Center align content vertically */
-    }
-
-    img {
-        border-radius: 8px; /* Rounded corners for images */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    }
-</style>
-
-<main>
-    <section class="container my-4">
-        <h1 class="text-center mb-4 section-heading border-bottom pb-2">Enquiry Form</h1>
-        <div class="row">
-            <div class="col-md-6">
-                <img src="{% static 'images/enquiry1.jpg' %}" class="img-fluid" alt="Enquiry Image" /> 
-            </div>
-            <div class="col-md-6">
-                
-                <form method="post" action="{% url 'enquiry' %}">
-                    {% csrf_token %}
-                    <table class="table table-bordered">
-                        {{ form.as_table }}
-                        <tr>
-                            <td colspan="2" class="text-center">
-                                <input type="submit" class="btn btn-info text-white" value="Submit Enquiry" />
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </div>
+    <div class="row g-5 align-items-center justify-content-center">
+      <!-- Left image & benefits -->
+      <div class="col-lg-5">
+        <div class="card border-0 shadow-lg overflow-hidden position-relative rounded-4">
+          <img src="{% static 'images/enquiry1.jpg' %}" class="w-100 object-fit-cover" style="height: 480px; filter: brightness(0.85);" alt="Gym Consultation">
+          <div class="position-absolute bottom-0 start-0 w-100 p-4 text-white" style="background: linear-gradient(0deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0) 100%);">
+            <h4 class="fw-bold mb-2">What's Included In Your Pass:</h4>
+            <ul class="list-unstyled mb-0 d-flex flex-column gap-2 small">
+              <li class="d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill text-warning"></i> Full 3-day access to all weight & cardio rooms
+              </li>
+              <li class="d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill text-warning"></i> Complimentary 30-min coach consultation
+              </li>
+              <li class="d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill text-warning"></i> Full body composition & movement audit
+              </li>
+            </ul>
+          </div>
         </div>
-    </section>
-</main>
+      </div>
 
+      <!-- Right Form -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4 bg-white">
+          <h3 class="fw-bold mb-2">Send Us an Enquiry</h3>
+          <p class="text-secondary small mb-4">Fill out this quick form and our membership coordinator will reach out within 24 hours.</p>
+
+          <form method="post" action="{% url 'enquiry' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-accent btn-lg fw-bold py-3">
+                <i class="bi bi-send-fill me-2"></i> Submit Enquiry
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}

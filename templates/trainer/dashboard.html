@@ -1,138 +1,228 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Trainer Dashboard &bull; RJ GYM Staff{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Left Sidebar -->
+      <div class="col-lg-3">
+        {% include 'trainer/left_sidebar.html' %}
+      </div>
 
-<style>
-    .trainer-img {
-        width: 200px;
-        height: auto;
-        margin-left: 3%;
-        padding-top: 10px;
-    }
-    .card-footer {
-        display: flex;
-        gap: 24px;
-    }
-    .custom-h3 {
-        font-family: 'Helvetica Neue', sans-serif;
-        font-weight: bold;
-    }
-</style>
-
-<main>
-    <!-- Services -->
-    <section class="container my-4">
-        <div class="row">
-            <!-- Left Sidebar -->
-            <div class="col-lg-3 col-md-3">
-                {% include 'trainer/left_sidebar.html' %}
-            </div>
-
-            <!-- Dashboard Content -->
-            <div class="col-lg-9 col-md-9">
-                <h3 class="mb-4 border-bottom pb-1 text-center custom-h3">Trainer Dashboard</h3>
-
-                <div class="row g-3"> <!-- Add grid gap -->
-
-                    <!-- Trainer Info Card -->
-                    <div class="col-md-6">
-                        <div class="card shadow">
-                            <h5 class="card-header">My Profile</h5>
-                            <img src="{{ trainer.img.url }}" class="card-img-top trainer-img" alt="{{ trainer.full_name }}">
-                            <div class="card-body">
-                                <h6 class="card-text name-label">{{ trainer.username }}</h6>
-                                <p>Mobile number: {{ trainer.mobile }}</p>
-                                <p>Salary: {{ trainer.month_salary }}</p>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="col-md-6">
-                        <div class="card shadow">
-                            <h5 class="card-header">
-                                Achievements
-                                {% for achievements in achievement %}
-                                    {% if achievements.badge_image %}
-                                        <img src="{{ achievements.badge_image.url }}" width="30" alt="Badge" class="ml-2 float-end">
-                                    {% endif %}
-                                {% endfor %}
-                            </h5>
-                            <div class="card-body">
-                                {% if achievement %}
-                                    <ul>
-                                        {% for achievements in achievement %}
-                                            <li>{{ achievements.title }} - {{ achievements.date_awarded }}</li>
-                                            <li>{{ achievements.description }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <p>No achievements to display.</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                
-                    <!-- Trainer Activity Log -->
-                    <div class="col-md-6">
-                        <div class="card shadow">
-                            <h5 class="card-header">Recent Activities</h5>
-                            <div class="card-body">
-                                <ul>
-                                    {% if recent_activities %}
-                                        {% for activity in recent_activities %}
-                                            <li>{{ activity }}</li>
-                                        {% endfor %}
-                                    {% else %}
-                                        <li>Completed a fitness assessment.</li>
-                                        <li>Attended a yoga class.</li>
-                                        <li>Achieved a personal best in weightlifting.</li>
-                                        <li>Participated in a nutrition workshop.</li>
-                                        <p>No recent activities.</p>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <!-- Trainer's Schedule -->
-                    <div class="col-md-6">
-                        <div class="card shadow" style="margin-top: -270px;">
-                            <h5 class="card-header">Upcoming Sessions</h5>
-                            <div class="card-body">
-                                <ul>
-                                    {% if upcoming_sessions %}
-                                        {% for session in upcoming_sessions %}
-                                            <li>{{ session.date }} - {{ session.subscriber_name }}</li>
-                                        {% endfor %}
-                                    {% else %}
-                                        <li>Yoga class with John - 2024-09-25</li>
-                                        <li>Group fitness session - 2024-09-26</li>
-                                        <li>Nutrition workshop - 2024-09-27</li>
-                                        <li>Personal training session - 2024-09-28</li>
-                                        <p>No sessions scheduled.</p>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <!-- Health Tip of the Day -->
-                    <div class="col-md-6 offset-md-6">
-                        <div class="card shadow" style="margin-top: -250px;">
-                            <h5 class="card-header">Health Tip of the Day</h5>
-                            <div class="card-body">
-                                <p>"Stay active and maintain a balanced diet for optimal performance."</p>
-                            </div>
-                        </div>
-                    </div>
-                
-                </div>
-            </div>
+      <!-- Main Dashboard Content -->
+      <div class="col-lg-9">
+        <!-- Dashboard Top Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 border-bottom pb-3">
+          <div>
+            <h2 class="fw-bold mb-1">Trainer Command Center</h2>
+            <p class="text-secondary small mb-0">Manage your training roster, member reports, and earnings.</p>
+          </div>
+          <span class="badge bg-warning text-dark px-3 py-2 fs-6">
+            <i class="bi bi-circle-fill text-success fs-6 me-1"></i> Active Status
+          </span>
         </div>
-    </section>
+
+        <!-- KPI Summary Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-icon-accent">
+                <i class="bi bi-cash-coin"></i>
+              </div>
+              <div>
+                <div class="kpi-title">Monthly Pay</div>
+                <div class="kpi-value">${{ trainer.month_salary|default:"0" }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-icon-blue">
+                <i class="bi bi-people"></i>
+              </div>
+              <div>
+                <div class="kpi-title">Roster</div>
+                <div class="kpi-value">Active</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-icon-green">
+                <i class="bi bi-award"></i>
+              </div>
+              <div>
+                <div class="kpi-title">Honors</div>
+                <div class="kpi-value">{{ achievement|length|default:"0" }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-xl-3">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap kpi-icon-accent">
+                <i class="bi bi-bell"></i>
+              </div>
+              <div>
+                <div class="kpi-title">Alerts</div>
+                <div class="kpi-value">{{ unread_count|default:"0" }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Dashboard Cards Grid -->
+        <div class="row g-4">
+          <!-- Profile Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0">
+              <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-person-badge me-2"></i>Staff Profile</h6>
+                <a href="{% url 'trainer_edit_profile' %}" class="btn btn-sm btn-outline-primary rounded-pill">
+                  <i class="bi bi-pencil-square me-1"></i> Edit
+                </a>
+              </div>
+              <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                  {% if trainer.img %}
+                    <img src="{{ trainer.img.url }}" class="rounded-circle object-fit-cover shadow-sm" style="width: 72px; height: 72px;" alt="{{ trainer.full_name }}">
+                  {% else %}
+                    <div class="sidebar-avatar-placeholder mb-0" style="width: 72px; height: 72px;">
+                      <i class="bi bi-person-fill"></i>
+                    </div>
+                  {% endif %}
+                  <div>
+                    <h5 class="fw-bold mb-0">{{ trainer.full_name }}</h5>
+                    <p class="text-secondary small mb-1">@{{ trainer.username }}</p>
+                    <span class="badge bg-success-subtle text-success small">Certified Coach</span>
+                  </div>
+                </div>
+
+                <div class="p-3 bg-light rounded-3 small mb-3">
+                  <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Contact Phone:</span>
+                    <span class="fw-semibold text-dark">{{ trainer.mobile }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Assigned Salary:</span>
+                    <span class="fw-semibold text-success">${{ trainer.month_salary }} / mo</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="text-muted">Facility Address:</span>
+                    <span class="fw-semibold text-dark text-truncate" style="max-width: 200px;">{{ trainer.address }}</span>
+                  </div>
+                </div>
+
+                <p class="text-secondary small mb-0">{{ trainer.details|truncatewords:25 }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0">
+              <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-trophy me-2"></i>Honors & Credentials</h6>
+                <span class="badge bg-warning text-dark">{{ achievement|length }} Badges</span>
+              </div>
+              <div class="card-body">
+                {% if achievement %}
+                  <div class="d-flex flex-column gap-3">
+                    {% for ach in achievement %}
+                    <div class="d-flex align-items-center gap-3 p-2 bg-light rounded-3">
+                      {% if ach.badge_image %}
+                        <img src="{{ ach.badge_image.url }}" width="42" height="42" class="rounded object-fit-contain" alt="{{ ach.title }}">
+                      {% else %}
+                        <div class="kpi-icon-wrap kpi-icon-accent" style="width: 42px; height: 42px; font-size: 1.2rem;">
+                          <i class="bi bi-award-fill"></i>
+                        </div>
+                      {% endif %}
+                      <div>
+                        <h6 class="fw-bold mb-0 text-dark small">{{ ach.title }}</h6>
+                        <small class="text-muted d-block">{{ ach.date_awarded|date:"M Y" }} &bull; {{ ach.description|truncatewords:8 }}</small>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <div class="text-center py-4 text-muted">
+                    <i class="bi bi-award fs-1 text-muted"></i>
+                    <p class="small mt-2 mb-0">No trainer credentials listed yet.</p>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Upcoming Sessions Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0">
+              <div class="card-header bg-white">
+                <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-calendar-event me-2"></i>Upcoming Sessions & Schedule</h6>
+              </div>
+              <div class="card-body">
+                <ul class="list-group list-group-flush small">
+                  {% if upcoming_sessions %}
+                    {% for session in upcoming_sessions %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                      <span class="fw-semibold text-dark">{{ session.subscriber_name }}</span>
+                      <span class="badge bg-primary-subtle text-primary">{{ session.date }}</span>
+                    </li>
+                    {% endfor %}
+                  {% else %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                      <span><i class="bi bi-check-circle-fill text-success me-2"></i>Hypertrophy Coaching with John</span>
+                      <span class="badge bg-secondary-subtle text-secondary">Today, 4:00 PM</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                      <span><i class="bi bi-check-circle-fill text-success me-2"></i>Olympic Squat Mechanics</span>
+                      <span class="badge bg-secondary-subtle text-secondary">Tomorrow, 10:00 AM</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                      <span><i class="bi bi-check-circle-fill text-success me-2"></i>HIIT Group Conditioning</span>
+                      <span class="badge bg-secondary-subtle text-secondary">Friday, 5:30 PM</span>
+                    </li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity Log Card -->
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0">
+              <div class="card-header bg-white">
+                <h6 class="fw-bold mb-0 text-primary"><i class="bi bi-clock-history me-2"></i>Recent Coaching Activity</h6>
+              </div>
+              <div class="card-body">
+                <ul class="list-group list-group-flush small">
+                  {% if recent_activities %}
+                    {% for activity in recent_activities %}
+                    <li class="list-group-item px-0 py-2 text-secondary">{{ activity }}</li>
+                    {% endfor %}
+                  {% else %}
+                    <li class="list-group-item px-0 py-2 text-secondary">
+                      <i class="bi bi-dot text-primary fs-5"></i> Updated subscriber monthly progress review.
+                    </li>
+                    <li class="list-group-item px-0 py-2 text-secondary">
+                      <i class="bi bi-dot text-primary fs-5"></i> Logged new compound personal best for athlete roster.
+                    </li>
+                    <li class="list-group-item px-0 py-2 text-secondary">
+                      <i class="bi bi-dot text-primary fs-5"></i> Conducted bi-weekly mobility assessment.
+                    </li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
-
-
-
-
 {% endblock %}

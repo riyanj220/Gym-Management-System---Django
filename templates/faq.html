@@ -1,68 +1,55 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Frequently Asked Questions &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="section-title-wrap">
+      <span class="section-tag">Knowledge Base</span>
+      <h1 class="section-heading">Frequently Asked Questions</h1>
+      <p class="section-subtitle">
+        Find quick answers regarding our memberships, coaching protocols, facility rules, and amenities.
+      </p>
+    </div>
 
-<style>
-    .accordion-button {
-    font-weight: bold; 
-    transition: background-color 0.3s;
-}
-
-.accordion-button:hover {
-    background-color: #f0f0f0; 
-}
-
-.accordion-item {
-    border: none; 
-}
-
-.accordion-header {
-    border: none; 
-}
-
-.accordion-body {
-    background-color: #f9f9f9; 
-    border-top: 1px solid #ddd; /* Top border for separation */
-}
-
-/* Font Awesome icon styling */
-.accordion-button .fa-question-circle {
-    color: #007bff; /* Change icon color */
-}
-
-/* Add rounded corners to the accordion items */
-.accordion-item {
-    border-radius: 0.5rem; /* Rounded corners */
-}
-
-/* Add shadow effect */
-.accordion-item.shadow-sm {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-</style>
-<main>
-    <!-- FAQ Section -->
-    <section class="container my-4">
-        <h1 class="text-center mb-4 section-heading border-bottom pb-2">FAQ</h1>
-        <div class="accordion" id="accordionExample">
-            {% for faqs in faq %}
-            <div class="accordion-item shadow-sm mb-3 rounded">
-                <h2 class="accordion-header" id="heading{{ forloop.counter }}">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
-                        <span class="me-2"><i class="fas fa-question-circle"></i></span> <!-- Font Awesome icon -->
-                        {{ faqs.question }}
-                    </button>
-                </h2>
-                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <strong>{{ faqs.answer }}</strong>
-                    </div>
-                </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="accordion accordion-flush" id="faqAccordion">
+          {% for faqs in faq %}
+          <div class="card mb-3 border rounded-3 overflow-hidden shadow-sm">
+            <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+              <button class="accordion-button {% if not forloop.first %}collapsed{% endif %} fw-bold py-3 px-4 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% endif %}" aria-controls="collapse{{ forloop.counter }}">
+                <span class="badge bg-warning text-dark me-3">Q{{ forloop.counter }}</span>
+                {{ faqs.question }}
+              </button>
+            </h2>
+            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#faqAccordion">
+              <div class="accordion-body px-4 py-3 text-secondary lh-base border-top bg-light">
+                {{ faqs.answer }}
+              </div>
             </div>
-            {% endfor %}
+          </div>
+          {% empty %}
+          <div class="text-center py-5 text-muted">
+            <i class="bi bi-question-circle fs-1"></i>
+            <p class="mt-2">No FAQs posted yet.</p>
+          </div>
+          {% endfor %}
         </div>
-    </section>
-    <!-- End -->
+
+        <!-- Help box -->
+        <div class="card bg-white border rounded-4 p-4 mt-5 text-center shadow-sm">
+          <h5 class="fw-bold mb-2">Still Have Questions?</h5>
+          <p class="text-secondary small mb-3">Our concierge team is available around the clock to assist you.</p>
+          <div>
+            <a href="{% url 'enquiry' %}" class="btn btn-accent px-4 py-2 me-2">Submit an Enquiry</a>
+            <a href="{% url 'static_page' 'contact_us' %}" class="btn btn-outline-secondary px-4 py-2">Contact Support</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 {% endblock %}

@@ -1,20 +1,31 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Payment Cancelled &bull; RJ GYM{% endblock %}
+
 {% block content %}
-<main>
-    <section class="container my-4">
-        <!-- Cancel Message -->
-        <h3 class="text-center mb-4 section-heading border-bottom pb-2 text-danger">Oops! Your payment was cancelled</h3>
+<main class="py-5">
+  <div class="container my-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden text-center p-4 p-md-5">
+          <div class="mx-auto mb-3 bg-danger-subtle text-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 72px; height: 72px; font-size: 2rem;">
+            <i class="bi bi-x-lg"></i>
+          </div>
+          <h3 class="fw-bold text-dark mb-2">Checkout Incomplete</h3>
+          <p class="text-secondary small mb-4">Your payment process was interrupted or cancelled. No charges were incurred to your payment method.</p>
 
-        <!-- Encouraging Message -->
-        <p class="text-center mb-4">It looks like something went wrong with your payment. Don't worry, you can try again or choose a different plan!</p>
-
-        <!-- Action Buttons -->
-        <div class="text-center">
-            <a href="{% url 'pricing' %}" class="btn btn-secondary mb-2">View Pricing Plans</a>
-            <a href="{% url 'dashboard' %}" class="btn btn-primary mb-2">Go to Dashboard</a>
+          <div class="d-grid gap-2">
+            <a href="{% url 'pricing' %}" class="btn btn-accent py-2 fw-bold">
+              <i class="bi bi-arrow-repeat me-1"></i> Return to Membership Plans
+            </a>
+            <a href="{% url '' %}" class="btn btn-outline-secondary py-2">
+              Back to Home
+            </a>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
 </main>
 {% endblock %}

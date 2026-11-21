@@ -1,102 +1,95 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Trainer Notifications &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-3">
+        {% include 'trainer/left_sidebar.html' %}
+      </div>
 
-<style>
-	.custom-h3 {
-        font-family: 'Helvetica Neue', sans-serif;
-        font-weight: bold;
-    }
-</style>
-
-<main>
-    <section class="container my-4">
-
-        <div class="row">
-            <div class="col-3">
-                {% include 'trainer/left_sidebar.html' %}
+      <div class="col-lg-9">
+        <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden">
+          <div class="card-header bg-white p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+              <h4 class="fw-bold mb-1"><i class="bi bi-bell-fill text-warning me-2"></i>Trainer Alerts & Notices</h4>
+              <p class="text-secondary small mb-0">Real-time alerts regarding new subscriber assignments and administrative notices.</p>
             </div>
-
-            <div class="col-9">
-                <h3 class="mb-4 border-bottom pb-1 text-center custom-h3">
-                    Notifications  
-                    <span class="badge bg-info total_unread" style="position: relative; top: -3px;">{{unread_count}}</span>
-                    <span class="btn btn-info btn-sm float-end mark-all-read-btn" style="margin-left: 10px;">Mark all as read</span>
-                </h3>
-
-                <ul class="list-group notif-list">
-                    {% for notification in notifications %}
-                    <li class="list-group-item bg-light" data-id="{{ notification.id }}">
-                        {{notification.notif_msg}}
-                    </li>
-                    {% endfor %}
-                </ul>
-
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-warning text-dark px-3 py-2 fw-bold">
+                Unread: <span class="total_unread">{{ unread_count|default:"0" }}</span>
+              </span>
+              <button class="btn btn-outline-primary btn-sm mark-all-read-btn">
+                <i class="bi bi-check2-all me-1"></i> Mark All as Read
+              </button>
             </div>
+          </div>
+
+          <div class="card-body p-4">
+            <ul class="list-group list-group-flush notif-list d-flex flex-column gap-2">
+              {% for notification in notifications %}
+              <li class="list-group-item d-flex align-items-center gap-3 p-3 rounded-3 border bg-light" data-id="{{ notification.id }}">
+                <i class="bi bi-info-circle-fill text-primary fs-4"></i>
+                <span class="flex-grow-1 text-dark">{{ notification.notif_msg }}</span>
+                <span class="badge bg-secondary-subtle text-secondary small">Alert</span>
+              </li>
+              {% empty %}
+              <li class="list-group-item text-center py-4 text-muted border-0">
+                <i class="bi bi-bell-slash fs-2 d-block mb-2"></i>
+                No notifications logged.
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
-
-    </section>
-    <!-- End -->
+      </div>
+    </div>
+  </div>
 </main>
 
 <script type="text/javascript">
-    const Websocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/notifications/'
-    );
+  const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+  const Websocket = new WebSocket(protocol + window.location.host + '/ws/notifications/');
 
-    Websocket.onopen = function(){
-        Websocket.send(JSON.stringify({
-            'message': 'From Client'
-        }));
-    }
+  Websocket.onopen = function(){
+      Websocket.send(JSON.stringify({
+          'message': 'From Client'
+      }));
+  };
 
-    Websocket.onmessage = function(event) {
-        var _data = JSON.parse(event.data);
-        
-        if (_data.action === 'add') {
-            // Add a new notification to the list
-            $(".notif-list").prepend(
-                '<li class="list-group-item" data-id="'+_data.notif_id+'">'
-                + _data.notif + 
-                '</li>'
-            );
-        } else if (_data.action === 'delete') {
-            // Remove the notification from the list based on its ID
-            $(".notif-list").find("[data-id='" + _data.notif_id + "']").remove();
-        }
+  Websocket.onmessage = function(event) {
+      var _data = JSON.parse(event.data);
+      if (_data.action === 'add') {
+          $(".notif-list").prepend(
+              '<li class="list-group-item d-flex align-items-center gap-3 p-3 rounded-3 border bg-light" data-id="' + _data.notif_id + '">' +
+              '<i class="bi bi-info-circle-fill text-primary fs-4"></i>' +
+              '<span class="flex-grow-1 text-dark">' + _data.notif + '</span>' +
+              '<span class="badge bg-warning text-dark small">New</span>' +
+              '</li>'
+          );
+      } else if (_data.action === 'delete') {
+          $(".notif-list").find("[data-id='" + _data.notif_id + "']").remove();
+      }
+      $(".total_unread").text(_data.total);
+  };
 
-        // Update the unread count
-        $(".total_unread").text(_data.total);
-
-    };
-    Websocket.onclose = function(){
-        console.log("closed");
-    }
-
-
-    // Handle "Mark all as Read" click
-    $(".mark-all-read-btn").click(function() {
-        $.ajax({
-            url: "{% url 'mark_all_as_read' %}",  
-            type: "POST",
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            },
-            success: function(response) {
-                if (response.success) {
-                    // Set unread count to 0
-                    $(".total_unread").text(0);
-
-                    
-                    // Optionally, you can visually mark all notifications as read here
-                }
-            }
-        });
-    });
-
-
+  $(".mark-all-read-btn").click(function() {
+      $.ajax({
+          url: "{% url 'mark_all_as_read' %}",  
+          type: "POST",
+          data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          success: function(response) {
+              if (response.success) {
+                  $(".total_unread").text(0);
+                  $(".notif-list li").removeClass('bg-light').addClass('bg-white');
+              }
+          }
+      });
+  });
 </script>
-
 {% endblock %}

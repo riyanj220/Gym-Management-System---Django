@@ -1,54 +1,54 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Privacy Policy &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="card p-4 p-md-5 border-0 shadow-sm rounded-4 bg-white">
+          <div class="section-title-wrap text-start mb-4 border-bottom pb-3">
+            <span class="section-tag">Data Governance</span>
+            <h1 class="section-heading">Privacy & Data Protection</h1>
+            <p class="text-secondary small mb-0">Committed to protecting your personal information and privacy rights.</p>
+          </div>
 
-<main>
-    <!-- Privacy Policy -->
-    <section class="container my-4">
-        <h1 class="text-center mb-4 section-heading border-bottom pb-2">Privacy Policy</h1>
-        <p class="lead text-center">Your privacy is important to us. This policy explains how we collect, use, and protect your information.</p>
+          <div class="text-secondary lh-lg d-flex flex-column gap-4">
+            <div>
+              <h5 class="fw-bold text-dark">1. Information We Collect</h5>
+              <p>We collect essential information to manage your membership, customize workout programming, and maintain secure portal access:</p>
+              <ul class="mb-0">
+                <li>Account identifiers (username, email address, password hash)</li>
+                <li>Contact numbers and billing preferences</li>
+                <li>Fitness assessment details and coach messaging logs</li>
+              </ul>
+            </div>
 
-        <div class="mt-4">
-            <h5>1. Information We Collect</h5>
-            <p>We collect personal information when you register, including your name, email, and contact details.</p>
-            <ul>
-                <li>Contact information (e.g., email address, phone number)</li>
-                <li>Account information (e.g., username, password)</li>
-                <li>Payment information (processed securely)</li>
-                <li>Activity data (e.g., workout sessions, class attendance)</li>
-            </ul>
+            <div>
+              <h5 class="fw-bold text-dark">2. How We Use Your Data</h5>
+              <p>Your data is used solely to deliver personalized fitness experiences, facilitate communication with assigned coaches, process membership renewals, and notify you of facility schedules.</p>
+            </div>
 
-            <h5>2. How We Use Your Information</h5>
-            <p>Your information helps us to provide you with personalized services and to improve your experience.</p>
-            <ul>
-                <li>To manage your account and provide customer support</li>
-                <li>To personalize content and recommendations</li>
-                <li>To communicate with you regarding updates and promotions</li>
-                <li>To analyze usage and improve our services</li>
-            </ul>
+            <div>
+              <h5 class="fw-bold text-dark">3. Data Security & Payment Processing</h5>
+              <p>All sensitive financial transactions are routed directly through PCI-DSS Level 1 compliant gateways (Stripe). We do not store raw card numbers on our local databases.</p>
+            </div>
 
-            <h5>3. Data Protection</h5>
-            <p>We implement security measures to protect your information from unauthorized access.</p>
-            <ul>
-                <li>Encryption of sensitive data</li>
-                <li>Regular security audits</li>
-                <li>Access controls to limit who can view your information</li>
-            </ul>
+            <div>
+              <h5 class="fw-bold text-dark">4. Your Control & Access Rights</h5>
+              <p>You have full authority to update your profile data, request a copy of stored records, or close your profile by navigating to your Account Settings.</p>
+            </div>
+
+            <div class="pt-3 border-top">
+              <h6 class="fw-bold text-dark mb-1">Privacy Inquiries</h6>
+              <p class="small mb-0">For questions regarding your data, contact our compliance team at <a href="mailto:privacy@rjgym.com">privacy@rjgym.com</a>.</p>
+            </div>
+          </div>
         </div>
-
-        <div class="mt-5">
-            <h5>4. Your Rights</h5>
-            <p>You have the right to access, correct, or delete your personal information. If you wish to exercise any of these rights, please contact us.</p>
-
-            <h5>5. Changes to This Policy</h5>
-            <p>We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page.</p>
-
-            <h5>6. Contact Us</h5>
-            <p>If you have any questions about this privacy policy, please contact us:</p>
-            <p>Email: <a href="mailto:support@example.com">support@example.com</a></p>
-        </div>
-    </section>
-    <!-- End -->
+      </div>
+    </div>
+  </div>
 </main>
-
 {% endblock %}

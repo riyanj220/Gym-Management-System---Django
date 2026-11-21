@@ -1,46 +1,54 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}Terms & Conditions &bull; RJ GYM{% endblock %}
+
 {% block content %}
+<main class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="card p-4 p-md-5 border-0 shadow-sm rounded-4 bg-white">
+          <div class="section-title-wrap text-start mb-4 border-bottom pb-3">
+            <span class="section-tag">Legal Terms</span>
+            <h1 class="section-heading">Terms & Conditions of Service</h1>
+            <p class="text-secondary small mb-0">Last updated: January 2024</p>
+          </div>
 
-<main>
-    <!-- Terms and Conditions -->
-    <section class="container my-4">
-        <h1 class="text-center mb-4 section-heading border-bottom pb-2">Terms and Conditions</h1>
-        <p class="lead text-center">Please read these terms and conditions carefully before using our services.</p>
+          <div class="text-secondary lh-lg d-flex flex-column gap-4">
+            <div>
+              <h5 class="fw-bold text-dark">1. Membership Agreement</h5>
+              <p>By registering with RJ GYM, you agree to comply with all facility regulations, safety instructions, and coaching agreements. Memberships are non-transferable and tied to your personal registered profile.</p>
+            </div>
 
-        <div class="mt-4">
-            <h5>1. Membership Agreement</h5>
-            <p>By joining our gym, you agree to comply with all rules and regulations set forth. Membership is non-transferable and must be used by the member only.</p>
+            <div>
+              <h5 class="fw-bold text-dark">2. Payment & Subscription Terms</h5>
+              <p>All memberships are billed on a recurring or term basis according to your chosen plan. Payments are processed securely via Stripe. Failure to settle dues may result in automated keycard and digital portal suspension.</p>
+            </div>
 
-            <h5>2. Payment Terms</h5>
-            <p>All memberships require full payment upfront or monthly billing. Late payments may incur additional fees.</p>
-            <ul>
-                <li>Payment methods accepted: Credit/Debit cards, Bank transfers, Cash.</li>
-                <li>Failure to pay may result in suspension of access to facilities.</li>
-            </ul>
+            <div>
+              <h5 class="fw-bold text-dark">3. Cancellation & Freeze Policy</h5>
+              <p>Members may freeze their subscription for medical or travel reasons up to 60 days per calendar year. Membership cancellations can be requested via your account dashboard with zero exit fees.</p>
+            </div>
 
-            <h5>3. Cancellation Policy</h5>
-            <p>Members may cancel their membership at any time with a 30-day written notice.</p>
-            <ul>
-                <li>No refunds will be issued for unused membership time.</li>
-                <li>Cancellation requests can be submitted via email or in person.</li>
-            </ul>
+            <div>
+              <h5 class="fw-bold text-dark">4. Facility Conduct & Etiquette</h5>
+              <p>Safe, courteous, and respectful behavior is strictly required at all times. Please rerack free weights after use, sanitize equipment stations, and adhere to appropriate athletic attire.</p>
+            </div>
 
-            <h5>4. Conduct and Behavior</h5>
-            <p>Members are expected to behave in a respectful manner towards staff and other members. Violations may result in immediate suspension or termination of membership.</p>
+            <div>
+              <h5 class="fw-bold text-dark">5. Liability Waiver</h5>
+              <p>Participation in physical exercise inherently involves risk of injury. Members confirm they are medically fit to engage in progressive exercise regimens and agree to consult coaches before undertaking advanced compound lifts.</p>
+            </div>
 
-            <h5>5. Liability Waiver</h5>
-            <p>Members agree to use the facilities at their own risk. The gym is not liable for any injuries or accidents that occur during the use of our services.</p>
-
-            <h5>6. Changes to Terms</h5>
-            <p>We reserve the right to update these terms and conditions at any time. Members will be notified of significant changes via email or through notices in the gym.</p>
-
-            <h5>7. Contact Information</h5>
-            <p>If you have any questions about these terms and conditions, please contact us:</p>
-            <p>Email: <a href="mailto:support@example.com">support@example.com</a></p>
+            <div class="pt-3 border-top">
+              <h6 class="fw-bold text-dark mb-1">Questions regarding our policies?</h6>
+              <p class="small mb-0">Contact our administrative team at <a href="mailto:support@rjgym.com">support@rjgym.com</a>.</p>
+            </div>
+          </div>
         </div>
-    </section>
-    <!-- End -->
+      </div>
+    </div>
+  </div>
 </main>
-
 {% endblock %}

@@ -1,77 +1,114 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Subscribers &bull; Trainer Portal &bull; RJ GYM{% endblock %}
+
 {% block content %}
-{% load crispy_forms_tags %}
+<main class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-3">
+        {% include 'trainer/left_sidebar.html' %}
+      </div>
 
-<main>
-    <section class="container my-4">
-        <div class="row">
-            <!-- Left Sidebar -->
-            <div class="col-lg-3 col-md-3">
-                {% include 'trainer/left_sidebar.html' %}
-            </div>
+      <div class="col-lg-9">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 border-bottom pb-3">
+          <div>
+            <h2 class="fw-bold mb-1">Assigned Subscribers Roster</h2>
+            <p class="text-secondary small mb-0">Active athletes and gym members matched to your training schedule.</p>
+          </div>
+          <span class="badge bg-warning text-dark px-3 py-2 fw-bold">
+            Total Members: {{ trainer_subscribers|length }}
+          </span>
+        </div>
 
-            <!-- Main Content -->
-            <div class="col-9">
-                <h2 class="text-center mb-4 section-heading border-bottom pb-3">My Subscribers</h2>
-
-                <div class="row">
-                    {% for ts in trainer_subscribers %}
-                    <div class="col-md-6">
-                        <div class="card shadow-sm mb-4">
-                            <div class="card-body d-flex align-items-center">
-                                <!-- <div class="avatar rounded-circle mr-3" style="width: 50px; height: 50px; background-color: #f0f0f0;">
-                                    {{ts.subscriber.user.img.url}}
-                                </div> -->
-                                <h5 class="mb-0">{{ ts.subscriber|capfirst  }}</h5>
-                                <button data-bs-toggle="modal" data-bs-target="#exampleModal" title="Info" class="btn  btn-sm ms-auto fs-5"><i class="bi bi-info-circle"></i></button>
-
-                                <!-- Modal start -->
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-md">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title ms-auto" id="exampleModalLabel">{{ ts.subscriber|capfirst  }} Details</h5>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-
-                                        <div class="modal-body">
-                                          <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Plan</th>
-                                                        <th>Price</th>
-                                                        <th>Registration Date</th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                        <tr>
-                                                            <td>{{ ts.subscriber.plan }}</td>
-                                                            <td>{{ ts.subscriber.price}} $</td>
-                                                            <td>{{ ts.subscriber.reg_date }}</td>
-                                                        </tr>
-                                                </tbody>
-                                          </table>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <!-- modal end -->
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
+        <div class="row g-4">
+          {% for ts in trainer_subscribers %}
+          <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden card-hover">
+              <div class="card-body p-4 d-flex flex-column">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                  <div class="sidebar-avatar-placeholder mb-0" style="width: 54px; height: 54px; font-size: 1.4rem;">
+                    <i class="bi bi-person-fill"></i>
+                  </div>
+                  <div>
+                    <h5 class="fw-bold mb-0">{{ ts.subscriber|capfirst }}</h5>
+                    <span class="badge bg-primary-subtle text-primary small">{{ ts.subscriber.plan }}</span>
+                  </div>
+                  <button data-bs-toggle="modal" data-bs-target="#subModal{{ ts.id }}" title="View Member Details" class="btn btn-outline-secondary btn-sm ms-auto rounded-circle" style="width:36px; height:36px;">
+                    <i class="bi bi-info-lg"></i>
+                  </button>
                 </div>
 
+                <div class="p-3 bg-light rounded-3 small mb-3">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="text-muted">Subscription Fee:</span>
+                    <span class="fw-bold text-success">${{ ts.subscriber.price }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="text-muted">Registered Date:</span>
+                    <span class="fw-semibold text-dark">{{ ts.subscriber.reg_date }}</span>
+                  </div>
+                </div>
+
+                <div class="mt-auto d-flex gap-2">
+                  <a href="{% url 'trainer_chat' ts.subscriber.id %}" class="btn btn-primary btn-sm flex-grow-1">
+                    <i class="bi bi-chat-dots me-1"></i> Open Chat
+                  </a>
+                  <a href="{% url 'report_to_user' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-flag"></i> Send Feedback
+                  </a>
+                </div>
+              </div>
             </div>
-        </div> <!-- End of row -->
 
-    </section>
+            <!-- Modal for Member Details with unique ID -->
+            <div class="modal fade" id="subModal{{ ts.id }}" tabindex="-1" aria-labelledby="subModalLabel{{ ts.id }}" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0">
+                  <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold" id="subModalLabel{{ ts.id }}">
+                      <i class="bi bi-person-check-fill text-warning me-2"></i>{{ ts.subscriber|capfirst }} &bull; Membership Profile
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body p-4">
+                    <div class="table-responsive">
+                      <table class="gym-table">
+                        <thead>
+                          <tr>
+                            <th>Plan Name</th>
+                            <th>Plan Price</th>
+                            <th>Enrolled Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="fw-bold">{{ ts.subscriber.plan }}</td>
+                            <td class="text-success fw-bold">${{ ts.subscriber.price }}</td>
+                            <td class="text-muted">{{ ts.subscriber.reg_date }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="col-12 text-center py-5 text-muted">
+            <i class="bi bi-people fs-1 text-muted"></i>
+            <h5 class="fw-bold mt-2">No Subscribers Assigned Yet</h5>
+            <p class="small text-muted">Subscribers matched by gym management will appear here.</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
-
 {% endblock %}

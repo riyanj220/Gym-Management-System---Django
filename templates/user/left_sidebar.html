@@ -1,58 +1,52 @@
-<style>
-    .list-group {
-        margin-top: 0;
-    }
-    .left-sidebar {
-        position: sticky;
-        top: 0;
-    }
-    .list-group-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .list-group-item i {
-        font-size: 1.5rem; /* Icon size */
-    }
-    .name-label {
-        font-weight: bold;
-        font-size: 1.2rem;
-        color: #007bff;
-        text-align: center;
-        border: 2px solid #007bff;
-        border-radius: 5px;
-        padding: 5px;
-        text-transform: capitalize;
-    }
-</style>
-
-<div class="card mb-1">
-    <div class="card-body text-center">
-        <h5 class="name-label">@ {{ user.username }}</h5>
-    </div>
+<!-- User Portal Left Sidebar -->
+<div class="sidebar-profile-card">
+  <div class="sidebar-avatar-placeholder">
+    <i class="bi bi-person-fill"></i>
+  </div>
+  <h6 class="fw-bold mb-1 text-dark">{{ user.username|capfirst }}</h6>
+  <span class="badge bg-success-subtle text-success border border-success-subtle small">
+    <i class="bi bi-check-circle-fill me-1"></i> Member Active
+  </span>
 </div>
 
-<div class="list-group">
-    <a href="{% url 'dashboard' %}" class="list-group-item {% if request.path == '/Dashboard' %} active {% endif %}">
-        <i class="bi bi-house"></i> Dashboard
-    </a>
-    <a href="{% url 'notifications' %}" class="list-group-item {% if request.path == '/Notifications' %} active {% endif %}">
-        <i class="bi bi-bell"></i> Notifications <span class="float-end badge bg-info mt-1 ms-auto">{{total_unread}}</span>
-    </a>
+<div class="sidebar-nav">
+  <a href="{% url 'dashboard' %}" class="sidebar-nav-item {% if request.path == '/Dashboard' %}active{% endif %}">
+    <i class="bi bi-speedometer2"></i>
+    <span>Dashboard</span>
+  </a>
 
-    {%if current_plan %}
-    <a href="{% url 'subscriber_chat' %}" class="list-group-item {% if '/Subscriber-Chat' in request.path %} active {% endif %}">
-     <i class="bi bi-chat-dots"></i> Chat
-    </a>
+  <a href="{% url 'notifications' %}" class="sidebar-nav-item {% if request.path == '/Notifications' %}active{% endif %}">
+    <i class="bi bi-bell"></i>
+    <span>Notifications</span>
+    {% if total_unread %}
+      <span class="sidebar-nav-badge">{{ total_unread }}</span>
     {% endif %}
-    
-    <a href="{% url 'report_to_trainer' %}" class="list-group-item {% if request.path == '/Report-To-Trainer' %} active {% endif %}">
-        <i class="bi bi-flag"></i> Report to Trainer
-    </a>
-    <a href="{% url 'update_profile' %}" class="list-group-item {% if request.path == '/Edit-Profile' %} active {% endif %}">
-        <i class="bi bi-gear"></i> Settings
-    </a>
-    <a href="{% url 'static_page' 'contact_us' %}" class="list-group-item">
-        <i class="bi bi-envelope"></i> Contact Support
-    </a>
+  </a>
+
+  {% if current_plan %}
+  <a href="{% url 'subscriber_chat' %}" class="sidebar-nav-item {% if '/Subscriber-Chat' in request.path %}active{% endif %}">
+    <i class="bi bi-chat-dots"></i>
+    <span>Coach Chat</span>
+  </a>
+  {% endif %}
+
+  <a href="{% url 'report_to_trainer' %}" class="sidebar-nav-item {% if request.path == '/Report-To-Trainer' %}active{% endif %}">
+    <i class="bi bi-journal-check"></i>
+    <span>Trainer Report</span>
+  </a>
+
+  <a href="{% url 'update_profile' %}" class="sidebar-nav-item {% if request.path == '/Edit-Profile' %}active{% endif %}">
+    <i class="bi bi-gear"></i>
+    <span>Account Settings</span>
+  </a>
+
+  <a href="{% url 'pricing' %}" class="sidebar-nav-item {% if request.path == '/Subscription-Plans/' %}active{% endif %}">
+    <i class="bi bi-card-checklist"></i>
+    <span>Explore Plans</span>
+  </a>
+
+  <a href="{% url 'static_page' 'contact_us' %}" class="sidebar-nav-item">
+    <i class="bi bi-headset"></i>
+    <span>Support Desk</span>
+  </a>
 </div>
